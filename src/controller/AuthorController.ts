@@ -8,7 +8,7 @@ export class AuthorController{
     async validateAuthor (name: string, isDeleted: boolean) {
         let findAuthor = await this.AuthorService.searchAuthorByName(name);
 
-        if (findAuthor !== undefined ){
+        if (findAuthor !== null ){
             console.log("Requisição cancelada")
             return true;
         }
@@ -18,4 +18,10 @@ export class AuthorController{
         console.log("Dados da requisição validados:", name, isDeleted);
         return this.AuthorService.createAuthor(name, isDeleted)
     }
+
+    searchAuthor (idAuthor?: string){
+        console.log("Requisição valida");
+        return this.AuthorService.searchAuthor(idAuthor);
+    }
+
 }

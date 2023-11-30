@@ -20,6 +20,7 @@ export class AuthorRepository{
     }
 
     async authorByName (nameAuthor: string) {
+        console.log("Procurando autor");
         const authorByName = await prisma.author.findFirst({
             where: {
               name: nameAuthor,
@@ -29,6 +30,20 @@ export class AuthorRepository{
         return authorByName;
     }
 
+    async allAuthors () {
+        console.log("Procurando autores");
+        const allAuthors = await prisma.author.findMany({ where: { isDeleted: false } });
+        return allAuthors;
+     }
 
+    async authorById (idAuthor: string) {
+        console.log("Procurando autor");
+        const authorById = await prisma.author.findFirst({ 
+            where: { 
+                id: idAuthor, 
+                isDeleted: false 
+            } 
+        });
+        return authorById;
+    }
 }
- 

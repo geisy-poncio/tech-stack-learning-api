@@ -18,5 +18,13 @@ export class AuthorService {
         return this.authorRepository.authorByName(nameAuthor);
     }
 
-
+    searchAuthor (idAuthor?: string){
+        if(idAuthor === undefined){
+            console.log("Encaminhando pesquisa de todos os autores");
+            return this.authorRepository.allAuthors();
+        } else {
+            console.log("Encaminhando pesquisa de autor pelo id");
+            return this.authorRepository.authorById(idAuthor);
+        }
+    }    
 }

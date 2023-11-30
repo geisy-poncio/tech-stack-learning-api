@@ -35,4 +35,36 @@ app.post("/authors", async (request, response, next) => {
     }
 })
 
+app.get("/authors/:id", async (request, response, next) => {0
+    const idAuthor = request.params.id;
+
+    if (idAuthor === undefined) {
+        return response.sendStatus(400);
+    }
+
+    console.log("Requisição sendo enviada");
+    const author = await authorController.searchAuthor(idAuthor);
+
+    if (author === null) {
+        console.log("Autor não encontrado");
+        return response.sendStatus(404);
+    }
+
+    console.log("Apresentando autor");
+    response.status(200).json({ author })   
+})
+
+app.get("/authors", async (request, response, next) => {
+    console.log("Requisição sendo enviada");
+    const authors = await authorController.searchAuthor();
+
+    if (authors === null) {
+        console.log("Ainda não há autores registrados");
+        return response.sendStatus(404);
+    }
+
+    console.log("Apresentando lista de autores");
+    response.status(200).json({ authors })
+})
+
 app.listen(3000, () => console.log("Rodando"))
