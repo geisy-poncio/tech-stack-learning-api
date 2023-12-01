@@ -1,7 +1,8 @@
-import express from 'express';
+import express, { ErrorRequestHandler } from "express";
 import { AuthorController } from "./controller/AuthorController";
 import { AuthorService } from "./service/AuthorService";
 import { AuthorRepository } from "./repository/AuthorRepository";
+import { apiStatusCode } from './util/apiStatusCode';
 
 const app = express();
 
@@ -11,60 +12,130 @@ const authorRepository = new AuthorRepository();
 const authorService = new AuthorService(authorRepository);
 const authorController = new AuthorController(authorService);
 
-app.post("/authors", async (request, response, next) => {
-    if (request.body === undefined) {
+app.post("/authors",  async (request, response, next) => {
+    const { authorName, isDeleted } = request.body;
+
+    if (authorName === undefined || isDeleted === undefined) {
         return response.sendStatus(400);
     }
 
-    const { authorName, isDeleted } = request.body;
-    
     try {
-        console.log("Validando dados");
-        if (await authorController.validateAuthor(authorName, isDeleted) === true){
-            return response.status(400).json("Autor já está registrado.");
+        console.log("Sending data to create author");
+        const output = await authorController.createAuthor(authorName, isDeleted);
+        if (output.apiStatusCode === apiStatusCode.AUTHOR_EXISTS){
+            return response.status(409).json({
+                message: "Author already exists",
+                apiStatusCode: output.apiStatusCode
+            })
         }
 
-        console.log("Enviando dados para criar autor");
-        const authorSaved = await authorController.createAuthor(authorName, isDeleted);
-        console.log("Criação do autor concluída");
-        response.status(201).json({ authorSaved })
+        console.log("Author creation completed");
+        response.status(201).json({ 
+            message: "Author created successfully",
+            apiStatusCode: output.apiStatusCode,
+            data: output.data
+        })
 
     } catch (err) {
-        console.log(err)
-        return response.sendStatus(500)
+        next(err);
     }
 })
 
-app.get("/authors/:id", async (request, response, next) => {0
+app.get("/authors/:id", async (request, response, next) => {
     const idAuthor = request.params.id;
 
     if (idAuthor === undefined) {
         return response.sendStatus(400);
     }
 
-    console.log("Requisição sendo enviada");
-    const author = await authorController.searchAuthor(idAuthor);
+    try {
+        console.log("Request being sent");
+        const output = await authorController.searchAuthor(idAuthor);
 
-    if (author === null) {
-        console.log("Autor não encontrado");
-        return response.sendStatus(404);
+        if (output.apiStatusCode === apiStatusCode.AUTHOR_DOES_NOT_EXIST) {
+            return response.status(404).json({
+                message: "Author not found",
+                apiStatusCode: output.apiStatusCode
+            })
+        }
+
+        console.log("Showing author");
+        response.status(200).json({ 
+            message: "Author found",
+            apiStatusCode: output.apiStatusCode,
+            data: output.data 
+        })
+
+    } catch (err) {
+        next(err);
     }
-
-    console.log("Apresentando autor");
-    response.status(200).json({ author })   
+       
 })
 
 app.get("/authors", async (request, response, next) => {
-    console.log("Requisição sendo enviada");
-    const authors = await authorController.searchAuthor();
+    
+    try {
+        console.log("Request being sent");
+        const output = await authorController.searchAuthor();
 
-    if (authors === null) {
-        console.log("Ainda não há autores registrados");
-        return response.sendStatus(404);
+        if (output.apiStatusCode === apiStatusCode.AUTHOR_DOES_NOT_EXIST) {
+            return response.status(404).json({
+                message: "No authors yet",
+                apiStatusCode: output.apiStatusCode
+            })
+        }
+
+        console.log("Showing authors");
+        response.status(200).json({ 
+            message: "Authors foundA",
+            apiStatusCode: output.apiStatusCode,
+            data: output.data 
+        })
+
+    } catch (err) {
+        next(err);
+    }
+})
+
+app.put("/authors/:id", async (request, response, next) => {
+    const idAuthor = request.params.id;
+    const { authorName } = request.body; 
+
+    if (idAuthor === undefined || authorName === undefined) {
+        return response.sendStatus(400)
     }
 
-    console.log("Apresentando lista de autores");
-    response.status(200).json({ authors })
+    try{
+        console.log("Sending data to update author");
+        const output = await authorController.updateAuthor(idAuthor, authorName);
+
+        if (output.apiStatusCode === apiStatusCode.AUTHOR_EXISTS){
+            return response.status(409).json({
+                message: "Author not found",
+                apiStatusCode: output.apiStatusCode
+            })
+        }
+    
+        console.log("Author update completed");
+        response.status(201).json({ 
+            message: "Author updated successfully",
+            apiStatusCode: output.apiStatusCode,
+            data: output.data
+        })
+
+    } catch (err) {
+        next(err);
+    }
 })
+
+const errorHandler: ErrorRequestHandler = ((error, request, response, next) => {
+    console.log(error.message)
+    return response.status(500).json({
+        message: "Internal error",
+        apiStatusCode: apiStatusCode.INTERNAL_ERROR
+    })
+})
+
+app.use(errorHandler);
 
 app.listen(3000, () => console.log("Rodando"))

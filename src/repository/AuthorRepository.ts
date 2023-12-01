@@ -1,26 +1,26 @@
 import { PrismaClient } from '@prisma/client'
-import { Author } from "../author";
 
 export const prisma = new PrismaClient();
 
 export class AuthorRepository{
-    async saveAuthor (authorData: Author) {
+    async saveAuthor (input: {name: string, isDeleted: boolean}) {
         try {
+            console.log("Saving author")
             const newAuthor = await prisma.author.create({
               data: {
-                name: authorData.name,
-                isDeleted: authorData.isDeleted,
-              },
+                name: input.name,
+                isDeleted: input.isDeleted,
+              }
             });
             return newAuthor;
         } catch (error) {
-            console.error('Erro ao salvar author:', error);
+            console.error("Error saving author:", error);
             throw error;
         } 
     }
 
     async authorByName (nameAuthor: string) {
-        console.log("Procurando autor");
+        console.log("Looking for author");
         const authorByName = await prisma.author.findFirst({
             where: {
               name: nameAuthor,
@@ -31,13 +31,13 @@ export class AuthorRepository{
     }
 
     async allAuthors () {
-        console.log("Procurando autores");
+        console.log("Looking for authors");
         const allAuthors = await prisma.author.findMany({ where: { isDeleted: false } });
         return allAuthors;
      }
 
     async authorById (idAuthor: string) {
-        console.log("Procurando autor");
+        console.log("Looking for author");
         const authorById = await prisma.author.findFirst({ 
             where: { 
                 id: idAuthor, 
@@ -45,5 +45,17 @@ export class AuthorRepository{
             } 
         });
         return authorById;
+    }
+
+    async updateAuthor (idAuthor: string, nameAuthor: string) {
+        console.log("Updating author");
+        const updateAuthor = await prisma.author.update({
+            where: { id: idAuthor },
+            data: { 
+                name: nameAuthor,
+                isDeleted: false
+            }
+        });
+        return updateAuthor;
     }
 }

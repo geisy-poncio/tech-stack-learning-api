@@ -2,26 +2,21 @@ import { AuthorService } from "../service/AuthorService";
 
 export class AuthorController{
     constructor(
-        private readonly AuthorService: AuthorService
+        private readonly authorService: AuthorService
     ) {}
 
-    async validateAuthor (name: string, isDeleted: boolean) {
-        let findAuthor = await this.AuthorService.searchAuthorByName(name);
-
-        if (findAuthor !== null ){
-            console.log("Requisição cancelada")
-            return true;
-        }
-    } 
-
-    createAuthor (name: string, isDeleted: boolean) {
-        console.log("Dados da requisição validados:", name, isDeleted);
-        return this.AuthorService.createAuthor(name, isDeleted)
+    async createAuthor (name: string, isDeleted: boolean) {
+        console.log("Request received");
+        return await this.authorService.createAuthor(name, isDeleted);
     }
 
-    searchAuthor (idAuthor?: string){
-        console.log("Requisição valida");
-        return this.AuthorService.searchAuthor(idAuthor);
+    async searchAuthor (idAuthor?: string){
+        console.log("Request received");
+        return await this.authorService.searchAuthor(idAuthor);
     }
 
+    async updateAuthor(idAuthor: string, nameAuthor: string) {
+        console.log("Request received");
+        return await this.authorService.updateAuthor(idAuthor, nameAuthor);
+    }
 }
