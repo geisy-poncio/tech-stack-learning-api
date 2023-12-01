@@ -45,13 +45,24 @@ export class AuthorService {
     }    
 
     async updateAuthor (idAuthor: string, nameAuthor: string) {
-        let findAuthor = await this.authorRepository.authorById(idAuthor);
-        
-        if (!findAuthor) {
-            return new Output(apiStatusCode.AUTHOR_DOES_NOT_EXIST);
+        let output = await this.searchAuthor(idAuthor);
+
+        if (output.apiStatusCode === apiStatusCode.AUTHOR_DOES_NOT_EXIST) {
+            return output;
         }
         console.log("Forwarding for update");
         const updatedAuthor = await this.authorRepository.updateAuthor(idAuthor, nameAuthor);
         return new Output(apiStatusCode.SUCCESS, updatedAuthor);
+    }
+
+    async deleteAuthor (idAuthor: string) {
+        let findAuthor = await this.authorRepository.authorById(idAuthor);
+
+        if(!findAuthor) {
+            return new Output(apiStatusCode.AUTHOR_DOES_NOT_EXIST);
+        }
+        console.log("Forwarding for delete");
+        const deleteAuthor = await this.authorRepository.deleteAuthor(idAuthor);
+        return new Output(apiStatusCode.SUCCESS, deleteAuthor);
     }
 }

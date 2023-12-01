@@ -58,4 +58,16 @@ export class AuthorRepository{
         });
         return updateAuthor;
     }
+
+    async deleteAuthor (idAuthor: string) {
+        console.log("Excluding author");
+        const deleteAuthor = await prisma.author.update({
+            where: { id: idAuthor },
+            data: {
+                isDeleted: true,
+                deletedAt: new Date()
+            }
+        });
+        return deleteAuthor;
+    }
 }

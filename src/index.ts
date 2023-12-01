@@ -34,7 +34,7 @@ app.post("/authors",  async (request, response, next) => {
             message: "Author created successfully",
             apiStatusCode: output.apiStatusCode,
             data: output.data
-        })
+        });
 
     } catch (err) {
         next(err);
@@ -64,7 +64,7 @@ app.get("/authors/:id", async (request, response, next) => {
             message: "Author found",
             apiStatusCode: output.apiStatusCode,
             data: output.data 
-        })
+        });
 
     } catch (err) {
         next(err);
@@ -87,10 +87,10 @@ app.get("/authors", async (request, response, next) => {
 
         console.log("Showing authors");
         response.status(200).json({ 
-            message: "Authors foundA",
+            message: "Authors found",
             apiStatusCode: output.apiStatusCode,
             data: output.data 
-        })
+        });
 
     } catch (err) {
         next(err);
@@ -109,7 +109,7 @@ app.put("/authors/:id", async (request, response, next) => {
         console.log("Sending data to update author");
         const output = await authorController.updateAuthor(idAuthor, authorName);
 
-        if (output.apiStatusCode === apiStatusCode.AUTHOR_EXISTS){
+        if (output.apiStatusCode === apiStatusCode.AUTHOR_DOES_NOT_EXIST){
             return response.status(409).json({
                 message: "Author not found",
                 apiStatusCode: output.apiStatusCode
@@ -121,7 +121,37 @@ app.put("/authors/:id", async (request, response, next) => {
             message: "Author updated successfully",
             apiStatusCode: output.apiStatusCode,
             data: output.data
-        })
+        });
+
+    } catch (err) {
+        next(err);
+    }
+})
+
+app.delete("/authors/:id", async (request, response, next) => {
+    const idAuthor = request.params.id;
+
+    if (idAuthor === undefined) {
+        return response.sendStatus(400)
+    }
+
+    try{
+        console.log("Sending data to delete author");
+        const output = await authorController.deleteAuthor(idAuthor);
+
+        if (output.apiStatusCode === apiStatusCode.AUTHOR_DOES_NOT_EXIST){
+            return response.status(409).json({
+                message: "Author not found",
+                apiStatusCode: output.apiStatusCode
+            })
+        }
+    
+        console.log("Author deleted");
+        response.status(201).json({ 
+            message: "Author successfully deleted",
+            apiStatusCode: output.apiStatusCode,
+            data: output.data
+        });
 
     } catch (err) {
         next(err);

@@ -15,8 +15,13 @@ export class AuthorController{
         return await this.authorService.searchAuthor(idAuthor);
     }
 
-    async updateAuthor(idAuthor: string, nameAuthor: string) {
+    async updateAuthor (idAuthor: string, nameAuthor: string) {
         console.log("Request received");
         return await this.authorService.updateAuthor(idAuthor, nameAuthor);
+    }
+
+    async deleteAuthor (idAuthor: string) {
+        console.log("Request received");
+        return await this.authorService.deleteAuthor(idAuthor);
     }
 }
