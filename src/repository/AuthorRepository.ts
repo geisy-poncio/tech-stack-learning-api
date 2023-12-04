@@ -31,25 +31,29 @@ export class AuthorRepository{
 
     async getAllAuthors () {
         console.log("AuthorRepository::getAllAuthors::Looking for authors");
-        const allAuthors = await prisma.author.findMany({ where: { isDeleted: false } });
+        const allAuthors = await prisma.author.findMany({ 
+            where: { 
+                isDeleted: false 
+            } 
+        });
         return allAuthors;
      }
 
-    async getAuthorById (idAuthor: string) {
+    async getAuthorById (authorId: string) {
         console.log("AuthorRepository::getAuthorById::Looking for author");
         const authorById = await prisma.author.findFirst({ 
             where: { 
-                id: idAuthor, 
+                id: authorId, 
                 isDeleted: false 
             } 
         });
         return authorById;
     }
 
-    async updateAuthor (idAuthor: string, nameAuthor: string) {
+    async updateAuthor (authorId: string, nameAuthor: string) {
         console.log("AuthorRepository::updateAuthor::Updating author");
         const updateAuthor = await prisma.author.update({
-            where: { id: idAuthor },
+            where: { id: authorId },
             data: { 
                 name: nameAuthor
             }
@@ -57,10 +61,10 @@ export class AuthorRepository{
         return updateAuthor;
     }
 
-    async deleteAuthor (idAuthor: string) {
+    async deleteAuthor (authorId: string) {
         console.log("AuthorRepository::deleteAuthor::Excluding author");
         const deleteAuthor = await prisma.author.update({
-            where: { id: idAuthor },
+            where: { id: authorId },
             data: {
                 isDeleted: true,
                 deletedAt: new Date()

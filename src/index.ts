@@ -2,6 +2,9 @@ import express, { ErrorRequestHandler } from "express";
 import { AuthorController } from "./controller/AuthorController";
 import { AuthorService } from "./service/AuthorService";
 import { AuthorRepository } from "./repository/AuthorRepository";
+import { BookRepository } from "./repository/BookRepository";
+import { BookService } from "./service/BookService";
+import { BookController } from "./controller/BookController";
 import { apiStatusCode } from './util/apiStatusCode';
 
 const app = express();
@@ -11,6 +14,10 @@ app.use(express.json());
 const authorRepository = new AuthorRepository();
 const authorService = new AuthorService(authorRepository);
 const authorController = new AuthorController(authorService);
+
+const bookRepository = new BookRepository();
+const bookService = new BookService(bookRepository, authorRepository);
+const bookController = new BookController(bookService);
 
 app.post("/authors",  async (request, response, next) => {
     const { authorName } = request.body;
@@ -102,7 +109,7 @@ app.put("/authors/:id", async (request, response, next) => {
         const output = await authorController.updateAuthor(idAuthor, authorName);
 
         if (output.apiStatusCode === apiStatusCode.AUTHOR_DOES_NOT_EXIST){
-            return response.status(409).json({
+            return response.status(404).json({
                 message: "Author not found",
                 apiStatusCode: output.apiStatusCode
             })
@@ -127,7 +134,7 @@ app.delete("/authors/:id", async (request, response, next) => {
         const output = await authorController.deleteAuthor(idAuthor);
 
         if (output.apiStatusCode === apiStatusCode.AUTHOR_DOES_NOT_EXIST){
-            return response.status(409).json({
+            return response.status(404).json({
                 message: "Author not found",
                 apiStatusCode: output.apiStatusCode
             })
@@ -135,6 +142,38 @@ app.delete("/authors/:id", async (request, response, next) => {
     
         response.status(201).json({ 
             message: "Author successfully deleted",
+            apiStatusCode: output.apiStatusCode,
+            data: output.data
+        });
+
+    } catch (err) {
+        next(err);
+    }
+})
+
+app.post("/books", async (request, response, next) => {
+    const { name, authorId } = request.body;
+
+    if (name === undefined || authorId === undefined) {
+        return response.status(400).json({
+            message: "Invalid Input",
+            apiStatusCode: apiStatusCode.INVALID_INPUT
+        });
+    }
+
+    try {
+        console.log("index::POST/books::Sending data to create book");
+        const output = await bookController.createBook(name, authorId);
+
+        if (output.apiStatusCode === apiStatusCode.AUTHOR_DOES_NOT_EXIST){
+            return response.status(404).json({
+                message: "Author not found",
+                apiStatusCode: output.apiStatusCode
+            })
+        }
+
+        response.status(201).json({ 
+            message: "Book created successfully",
             apiStatusCode: output.apiStatusCode,
             data: output.data
         });

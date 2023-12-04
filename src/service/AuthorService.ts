@@ -21,9 +21,9 @@ export class AuthorService {
         return new Output(apiStatusCode.SUCCESS, savedAuthor);   
     }
 
-    async getAuthorById (idAuthor: string): Promise<Output> {
+    async getAuthorById (authorId: string): Promise<Output> {
         console.log("AuthorService::getAuthorById::Forwarding the search to the author by id");
-        const findAuthor = await this.authorRepository.getAuthorById(idAuthor);
+        const findAuthor = await this.authorRepository.getAuthorById(authorId);
 
         if (!findAuthor) {
             console.log("AuthorService::getAuthorById::Author does not exists");
@@ -33,32 +33,32 @@ export class AuthorService {
         return new Output(apiStatusCode.SUCCESS, findAuthor);
     }    
 
-    async getAllAuthors (idAuthor?: string): Promise<Output> {
+    async getAllAuthors (): Promise<Output> {
         console.log("AuthorService::getAllAuthors::Forwarding the research to all authors");
         const findAuthor = await this.authorRepository.getAllAuthors();
 
         return new Output(apiStatusCode.SUCCESS, findAuthor);
     }    
 
-    async updateAuthor (idAuthor: string, nameAuthor: string): Promise<Output> {
-        let output = await this.getAuthorById(idAuthor);
+    async updateAuthor (authorId: string, nameAuthor: string): Promise<Output> {
+        let output = await this.getAuthorById(authorId);
 
         if (output.apiStatusCode === apiStatusCode.AUTHOR_DOES_NOT_EXIST) {
             return output;
         }
         console.log("AuthorService::updateAuthor::Forwarding for update");
-        const updatedAuthor = await this.authorRepository.updateAuthor(idAuthor, nameAuthor);
+        const updatedAuthor = await this.authorRepository.updateAuthor(authorId, nameAuthor);
         return new Output(apiStatusCode.SUCCESS, updatedAuthor);
     }
 
-    async deleteAuthor (idAuthor: string): Promise<Output> {
-        let output = await this.getAuthorById(idAuthor);
+    async deleteAuthor (authorId: string): Promise<Output> {
+        let output = await this.getAuthorById(authorId);
 
         if (output.apiStatusCode === apiStatusCode.AUTHOR_DOES_NOT_EXIST) {
             return output;
         }
         console.log("AuthorService::deleteAuthor::Forwarding for delete");
-        const deleteAuthor = await this.authorRepository.deleteAuthor(idAuthor);
+        const deleteAuthor = await this.authorRepository.deleteAuthor(authorId);
         return new Output(apiStatusCode.SUCCESS, deleteAuthor);
     }
 }
