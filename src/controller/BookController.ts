@@ -24,4 +24,9 @@ export class BookController{
         console.log("BookController::updateBook::Request received");
         return await this.bookService.updateBook(bookId, name, authorId);
     }
+
+    async deleteBook(bookId: string) {
+        console.log("BookController::deleteBook::Request received");
+        return await this.bookService.deleteBook(bookId);
+    }
 }

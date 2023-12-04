@@ -263,6 +263,30 @@ app.put("/books/:id", async (request, response, next) => {
     }
 })
 
+app.delete("/books/:id", async (request, response, next) => {
+    const bookId = request.params.id;
+    
+    try{
+        console.log("index::DELETE/books/:id::Request being sent");
+        const output = await bookController.deleteBook(bookId);
+
+        if (output.apiStatusCode === apiStatusCode.BOOK_DOES_NOT_EXIST) {
+            return response.status(404).json({
+                message: "Book not found",
+                apiStatusCode: output.apiStatusCode
+            })
+        }
+
+        response.status(200).json({
+            message: "Book deleted successfully",
+            apiStatusCode: output.apiStatusCode,
+            data: output.data
+        })
+    } catch(err) {
+        next(err);
+    }
+})
+
 const errorHandler: ErrorRequestHandler = ((error, request, response, next) => {
     console.log(error.message)
     return response.status(500).json({

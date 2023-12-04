@@ -57,4 +57,16 @@ export class BookService {
         const output = await this.bookRepository.updateBook(bookId, name, authorId);
         return new Output(apiStatusCode.SUCCESS, output);
     }
+
+    async deleteBook(bookId: string): Promise<Output> {
+        const findBook = await this.getBookById(bookId);
+        
+        if (findBook.apiStatusCode === apiStatusCode.BOOK_DOES_NOT_EXIST) {
+            return findBook;
+        }
+
+        console.log("BookService::deleteBook::Forwarding for delete");
+        const output = await this.bookRepository.deleteBook(bookId);
+        return new Output(apiStatusCode.SUCCESS, output);
+    }
 }

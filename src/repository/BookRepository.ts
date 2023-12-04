@@ -42,7 +42,7 @@ export class BookRepository{
 
     async updateBook(bookId: string, name?: string, authorId?: string) {
         console.log("BookRepository::updateBook::Updating book");
-        const updateAuthor = await prisma.book.update({
+        const updateBook = await prisma.book.update({
             where: {
                 id: bookId
             },
@@ -51,6 +51,20 @@ export class BookRepository{
                 authorId: authorId
             }
         });
-        return updateAuthor;
+        return updateBook;
+    }
+
+    async deleteBook(bookId: string) {
+        console.log("BookRepository::deleteBook::Deleting book");
+        const deleteBook = await prisma.book.update({
+            where: {
+                id: bookId
+            },
+            data: {
+                isDeleted: true,
+                deletedAt: new Date()
+            }
+        });
+        return deleteBook;
     }
 }
