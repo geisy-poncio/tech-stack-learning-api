@@ -15,4 +15,28 @@ export class BookRepository{
         });
         return newBook;
     }
+
+    async getBookById (bookId: string) {
+        console.log("BookRepository::getBookById::Looking for book");
+        const findBook = await prisma.book.findFirst({
+            where: {
+                id: bookId,
+                isDeleted: false
+            },
+            include: {
+                author: true
+            }
+        });
+        return findBook;
+    }
+
+    async getAllBooks () {
+        console.log("BookRepository::getAllBook::Looking for books");
+        const allBooks = await prisma.book.findMany({ 
+            where: { 
+                isDeleted: false 
+            } 
+        });
+        return allBooks;
+    }
 }

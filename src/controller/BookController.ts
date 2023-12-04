@@ -9,4 +9,14 @@ export class BookController{
         console.log("BookController::createBook::Request received");
         return await this.bookService.createBook(name, authorId);
     }
+
+    async getBookById (bookId: string) {
+        console.log("BookController::getBookById::Request received");
+        return await this.bookService.getBookById(bookId);
+    }
+
+    async getAllBooks () {
+        console.log("BookController::getAllBooks::Request received");
+        return await this.bookService.getAllBooks();
+    }
 }
