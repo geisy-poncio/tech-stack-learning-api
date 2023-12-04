@@ -224,6 +224,45 @@ app.get("/books", async (request, response, next) => {
     }
 })
 
+app.put("/books/:id", async (request, response, next) => {
+    const bookId = request.params.id
+    const {name, authorId} = request.body;
+    
+    if (!name && !authorId) {
+        return response.status(400).json({
+            message: "Invalid Input",
+            apiStatusCode: apiStatusCode.INVALID_INPUT
+        });    
+    }
+
+    try{
+        console.log("index::PUT/books/:id::Request being sent");
+        const output = await bookController.updateBook(bookId, name, authorId);
+
+        if (output.apiStatusCode === apiStatusCode.BOOK_DOES_NOT_EXIST) {
+            return response.status(404).json({
+                message: "Book not found",
+                apiStatusCode: output.apiStatusCode
+            })
+        }
+
+        if (output.apiStatusCode === apiStatusCode.AUTHOR_DOES_NOT_EXIST) {
+            return response.status(404).json({
+                message: "Author not found",
+                apiStatusCode: output.apiStatusCode
+            })
+        }
+
+        response.status(200).json({
+            message: "Book updated successfully",
+            apiStatusCode: output.apiStatusCode,
+            data: output.data
+        })
+    } catch(err) {
+        next(err);
+    }
+})
+
 const errorHandler: ErrorRequestHandler = ((error, request, response, next) => {
     console.log(error.message)
     return response.status(500).json({

@@ -9,7 +9,7 @@ export class BookService {
         private readonly authorRepository: AuthorRepository
     ) {}
 
-    async createBook (name: string, authorId: string): Promise<Output> {
+    async createBook(name: string, authorId: string): Promise<Output> {
         console.log("BookService::createBook::Forwarding the search to the author by id");
         const findAuthor = await this.authorRepository.getAuthorById(authorId);
 
@@ -23,7 +23,7 @@ export class BookService {
         return new Output(apiStatusCode.SUCCESS, output);
     }
 
-    async getBookById (bookId: string): Promise<Output> {
+    async getBookById(bookId: string): Promise<Output> {
         console.log("BookService::getBookById::Forwarding the search to the book by id");
         const output = await this.bookRepository.getBookById(bookId);
 
@@ -35,9 +35,26 @@ export class BookService {
         return new Output(apiStatusCode.SUCCESS, output);
     } 
 
-    async getAllBooks (): Promise<Output> {
+    async getAllBooks(): Promise<Output> {
         console.log("BookService::getAllBooks::Forwarding the search books");
         const output = await this.bookRepository.getAllBooks();
+        return new Output(apiStatusCode.SUCCESS, output);
+    }
+
+    async updateBook(bookId: string, name: string, authorId: string): Promise<Output> {
+        const findBook = await this.getBookById(bookId);
+        if (findBook.apiStatusCode === apiStatusCode.BOOK_DOES_NOT_EXIST) {
+            return findBook;
+        }
+
+        const findAuthor = await this.authorRepository.getAuthorById(authorId);
+        if (!findAuthor) {
+            console.log("BookService::updateBook::Author does not exists");
+            return new Output(apiStatusCode.AUTHOR_DOES_NOT_EXIST);
+        }
+
+        console.log("BookService::updateBook::Forwarding for update");
+        const output = await this.bookRepository.updateBook(bookId, name, authorId);
         return new Output(apiStatusCode.SUCCESS, output);
     }
 }

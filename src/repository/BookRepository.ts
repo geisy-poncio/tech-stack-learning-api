@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client'
 export const prisma = new PrismaClient();
 
 export class BookRepository{
-    async saveBook (input: {name: string, authorId: string}) {
+    async saveBook(input: {name: string, authorId: string}) {
         console.log("BookRepository::saveBook::Saving book");
         const newBook = await prisma.book.create({
             data: {
@@ -16,7 +16,7 @@ export class BookRepository{
         return newBook;
     }
 
-    async getBookById (bookId: string) {
+    async getBookById(bookId: string) {
         console.log("BookRepository::getBookById::Looking for book");
         const findBook = await prisma.book.findFirst({
             where: {
@@ -30,7 +30,7 @@ export class BookRepository{
         return findBook;
     }
 
-    async getAllBooks () {
+    async getAllBooks() {
         console.log("BookRepository::getAllBook::Looking for books");
         const allBooks = await prisma.book.findMany({ 
             where: { 
@@ -38,5 +38,19 @@ export class BookRepository{
             } 
         });
         return allBooks;
+    }
+
+    async updateBook(bookId: string, name?: string, authorId?: string) {
+        console.log("BookRepository::updateBook::Updating book");
+        const updateAuthor = await prisma.book.update({
+            where: {
+                id: bookId
+            },
+            data: {
+                name: name,
+                authorId: authorId
+            }
+        });
+        return updateAuthor;
     }
 }
