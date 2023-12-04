@@ -1,67 +1,63 @@
 import { AuthorRepository } from "../repository/AuthorRepository";
 import { apiStatusCode } from "../util/apiStatusCode";
-import { Output } from "../util/output";
+import { Output } from "../util/Output";
 
 
 export class AuthorService {
     constructor(
         private readonly  authorRepository: AuthorRepository
-    ) {
-    }
+    ) {}
 
-    async createAuthor(name: string, isDeleted: boolean): Promise<Output> {
-        let findAuthor = await this.authorRepository.authorByName(name);
+    async createAuthor(name: string): Promise<Output> {
+        let findAuthor = await this.authorRepository.getAuthorByName(name);
 
         if (findAuthor) {
+            console.log("AuthorService::createAuthor::Author exists");
             return new Output(apiStatusCode.AUTHOR_EXISTS);
         }
 
-        console.log("Forwarding to save");
-        const savedAuthor = await this.authorRepository.saveAuthor({name, isDeleted});
-        return new Output(apiStatusCode.SUCCESS, savedAuthor);
-        
+        console.log("AuthorService::createAuthor::Forwarding to save");
+        const savedAuthor = await this.authorRepository.saveAuthor({name});
+        return new Output(apiStatusCode.SUCCESS, savedAuthor);   
     }
 
-    async searchAuthor (idAuthor?: string){
-        if(idAuthor === undefined){
-            console.log("Forwarding the research to all authors");
-            const findAuthor = await this.authorRepository.allAuthors();
-            
-            if (!findAuthor) {
-                return new Output(apiStatusCode.AUTHOR_DOES_NOT_EXIST);
-            }
+    async getAuthorById (idAuthor: string): Promise<Output> {
+        console.log("AuthorService::getAuthorById::Forwarding the search to the author by id");
+        const findAuthor = await this.authorRepository.getAuthorById(idAuthor);
 
-            return new Output(apiStatusCode.SUCCESS, findAuthor);
-        } else {
-            console.log("Forwarding the search to the author by id");
-            const findAuthorById = await this.authorRepository.authorById(idAuthor);
-
-            if (!findAuthorById) {
-                return new Output(apiStatusCode.AUTHOR_DOES_NOT_EXIST);
-            }
-
-            return new Output(apiStatusCode.SUCCESS, findAuthorById);
+        if (!findAuthor) {
+            console.log("AuthorService::getAuthorById::Author does not exists");
+            return new Output(apiStatusCode.AUTHOR_DOES_NOT_EXIST);
         }
+
+        return new Output(apiStatusCode.SUCCESS, findAuthor);
     }    
 
-    async updateAuthor (idAuthor: string, nameAuthor: string) {
-        let output = await this.searchAuthor(idAuthor);
+    async getAllAuthors (idAuthor?: string): Promise<Output> {
+        console.log("AuthorService::getAllAuthors::Forwarding the research to all authors");
+        const findAuthor = await this.authorRepository.getAllAuthors();
+
+        return new Output(apiStatusCode.SUCCESS, findAuthor);
+    }    
+
+    async updateAuthor (idAuthor: string, nameAuthor: string): Promise<Output> {
+        let output = await this.getAuthorById(idAuthor);
 
         if (output.apiStatusCode === apiStatusCode.AUTHOR_DOES_NOT_EXIST) {
             return output;
         }
-        console.log("Forwarding for update");
+        console.log("AuthorService::updateAuthor::Forwarding for update");
         const updatedAuthor = await this.authorRepository.updateAuthor(idAuthor, nameAuthor);
         return new Output(apiStatusCode.SUCCESS, updatedAuthor);
     }
 
-    async deleteAuthor (idAuthor: string) {
-        let findAuthor = await this.authorRepository.authorById(idAuthor);
+    async deleteAuthor (idAuthor: string): Promise<Output> {
+        let output = await this.getAuthorById(idAuthor);
 
-        if(!findAuthor) {
-            return new Output(apiStatusCode.AUTHOR_DOES_NOT_EXIST);
+        if (output.apiStatusCode === apiStatusCode.AUTHOR_DOES_NOT_EXIST) {
+            return output;
         }
-        console.log("Forwarding for delete");
+        console.log("AuthorService::deleteAuthor::Forwarding for delete");
         const deleteAuthor = await this.authorRepository.deleteAuthor(idAuthor);
         return new Output(apiStatusCode.SUCCESS, deleteAuthor);
     }

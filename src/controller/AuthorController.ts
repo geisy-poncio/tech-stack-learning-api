@@ -5,23 +5,28 @@ export class AuthorController{
         private readonly authorService: AuthorService
     ) {}
 
-    async createAuthor (name: string, isDeleted: boolean) {
-        console.log("Request received");
-        return await this.authorService.createAuthor(name, isDeleted);
+    async createAuthor (name: string) {
+        console.log("AuthorController::createAuthor::Request received");
+        return await this.authorService.createAuthor(name);
     }
 
-    async searchAuthor (idAuthor?: string){
-        console.log("Request received");
-        return await this.authorService.searchAuthor(idAuthor);
+    async getAuthorById (authorId: string){
+        console.log("AuthorController::getAuthorById::Request received");
+        return await this.authorService.getAuthorById(authorId);
     }
 
-    async updateAuthor (idAuthor: string, nameAuthor: string) {
-        console.log("Request received");
-        return await this.authorService.updateAuthor(idAuthor, nameAuthor);
+    async getAllAuthors (){
+        console.log("AuthorController::getAllAuthors::Request received");
+        return await this.authorService.getAllAuthors();
     }
 
-    async deleteAuthor (idAuthor: string) {
-        console.log("Request received");
-        return await this.authorService.deleteAuthor(idAuthor);
+    async updateAuthor (authorId: string, nameAuthor: string) {
+        console.log("AuthorController::updateAuthor::Request received");
+        return await this.authorService.updateAuthor(authorId, nameAuthor);
+    }
+
+    async deleteAuthor (authorId: string) {
+        console.log("AuthorController::deleteAuthor::Request received");
+        return await this.authorService.deleteAuthor(authorId);
     }
 }

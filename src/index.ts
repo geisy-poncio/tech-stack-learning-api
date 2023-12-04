@@ -13,15 +13,18 @@ const authorService = new AuthorService(authorRepository);
 const authorController = new AuthorController(authorService);
 
 app.post("/authors",  async (request, response, next) => {
-    const { authorName, isDeleted } = request.body;
+    const { authorName } = request.body;
 
-    if (authorName === undefined || isDeleted === undefined) {
-        return response.sendStatus(400);
+    if (authorName === undefined) {
+        return response.status(400).json({
+            message: "Invalid Input",
+            apiStatusCode: apiStatusCode.INVALID_INPUT
+        });
     }
 
     try {
-        console.log("Sending data to create author");
-        const output = await authorController.createAuthor(authorName, isDeleted);
+        console.log("index::POST/authors::Sending data to create author");
+        const output = await authorController.createAuthor(authorName);
         if (output.apiStatusCode === apiStatusCode.AUTHOR_EXISTS){
             return response.status(409).json({
                 message: "Author already exists",
@@ -29,7 +32,6 @@ app.post("/authors",  async (request, response, next) => {
             })
         }
 
-        console.log("Author creation completed");
         response.status(201).json({ 
             message: "Author created successfully",
             apiStatusCode: output.apiStatusCode,
@@ -42,15 +44,11 @@ app.post("/authors",  async (request, response, next) => {
 })
 
 app.get("/authors/:id", async (request, response, next) => {
-    const idAuthor = request.params.id;
-
-    if (idAuthor === undefined) {
-        return response.sendStatus(400);
-    }
+    const authorId = request.params.id;
 
     try {
-        console.log("Request being sent");
-        const output = await authorController.searchAuthor(idAuthor);
+        console.log("index::GET/authors/:id::Request being sent");
+        const output = await authorController.getAuthorById(authorId);
 
         if (output.apiStatusCode === apiStatusCode.AUTHOR_DOES_NOT_EXIST) {
             return response.status(404).json({
@@ -59,7 +57,6 @@ app.get("/authors/:id", async (request, response, next) => {
             })
         }
 
-        console.log("Showing author");
         response.status(200).json({ 
             message: "Author found",
             apiStatusCode: output.apiStatusCode,
@@ -75,17 +72,9 @@ app.get("/authors/:id", async (request, response, next) => {
 app.get("/authors", async (request, response, next) => {
     
     try {
-        console.log("Request being sent");
-        const output = await authorController.searchAuthor();
+        console.log("index::GET/authors::Request being sent");
+        const output = await authorController.getAllAuthors();
 
-        if (output.apiStatusCode === apiStatusCode.AUTHOR_DOES_NOT_EXIST) {
-            return response.status(404).json({
-                message: "No authors yet",
-                apiStatusCode: output.apiStatusCode
-            })
-        }
-
-        console.log("Showing authors");
         response.status(200).json({ 
             message: "Authors found",
             apiStatusCode: output.apiStatusCode,
@@ -101,12 +90,15 @@ app.put("/authors/:id", async (request, response, next) => {
     const idAuthor = request.params.id;
     const { authorName } = request.body; 
 
-    if (idAuthor === undefined || authorName === undefined) {
-        return response.sendStatus(400)
+    if (authorName === undefined) {
+        return response.status(400).json({
+            message: "Invalid Input",
+            apiStatusCode: apiStatusCode.INVALID_INPUT
+        });
     }
 
     try{
-        console.log("Sending data to update author");
+        console.log("index::PUT/authors/:id::Sending data to update author");
         const output = await authorController.updateAuthor(idAuthor, authorName);
 
         if (output.apiStatusCode === apiStatusCode.AUTHOR_DOES_NOT_EXIST){
@@ -116,7 +108,6 @@ app.put("/authors/:id", async (request, response, next) => {
             })
         }
     
-        console.log("Author update completed");
         response.status(201).json({ 
             message: "Author updated successfully",
             apiStatusCode: output.apiStatusCode,
@@ -131,12 +122,8 @@ app.put("/authors/:id", async (request, response, next) => {
 app.delete("/authors/:id", async (request, response, next) => {
     const idAuthor = request.params.id;
 
-    if (idAuthor === undefined) {
-        return response.sendStatus(400)
-    }
-
     try{
-        console.log("Sending data to delete author");
+        console.log("index::DELETE/authors/:id::Sending data to delete author");
         const output = await authorController.deleteAuthor(idAuthor);
 
         if (output.apiStatusCode === apiStatusCode.AUTHOR_DOES_NOT_EXIST){
@@ -146,7 +133,6 @@ app.delete("/authors/:id", async (request, response, next) => {
             })
         }
     
-        console.log("Author deleted");
         response.status(201).json({ 
             message: "Author successfully deleted",
             apiStatusCode: output.apiStatusCode,
@@ -168,4 +154,4 @@ const errorHandler: ErrorRequestHandler = ((error, request, response, next) => {
 
 app.use(errorHandler);
 
-app.listen(3000, () => console.log("Rodando"))
+app.listen(3000, () => console.log("Running"));
