@@ -1,6 +1,6 @@
-import {describe, expect, jest, test} from "@jest/globals";
-import { AuthorRepository, prisma } from "../src/repository/AuthorRepository";
-import { authorEntities } from "./mocks/databaseEntities";
+import { describe, expect, jest, test } from "@jest/globals";
+import { AuthorRepository, prisma } from "../../src/repository/AuthorRepository";
+import { authorEntities } from "../mocks/databaseEntities";
 
 describe("AuthorRepository", () => {
     const authorRepository = new AuthorRepository();

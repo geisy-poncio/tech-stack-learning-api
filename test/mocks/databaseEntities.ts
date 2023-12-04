@@ -7,3 +7,13 @@ export const authorEntities = {
     deletedAt: null,
     books: []
 };
+
+export const bookEntities = {
+    id: "1",
+    name: "Jane Doe Book",
+    isDeleted: false,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    deletedAt: null,
+    authorId: "1"
+};

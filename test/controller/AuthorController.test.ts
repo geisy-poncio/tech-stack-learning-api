@@ -1,10 +1,10 @@
 import { describe, expect, jest, test } from "@jest/globals";
-import { AuthorService } from "../src/service/AuthorService";
-import { AuthorRepository } from "../src/repository/AuthorRepository";
-import { AuthorController } from "../src/controller/AuthorController";
-import { apiStatusCode } from "../src/util/apiStatusCode";
-import { Output } from "../src/util/Output";
-import { authorEntities } from "./mocks/databaseEntities";
+import { AuthorService } from "../../src/service/AuthorService";
+import { AuthorRepository } from "../../src/repository/AuthorRepository";
+import { AuthorController } from "../../src/controller/AuthorController";
+import { apiStatusCode } from "../../src/util/apiStatusCode";
+import { Output } from "../../src/util/Output";
+import { authorEntities } from "../mocks/databaseEntities";
 
 describe("AuthorController", () => {
     const authorRepository = new AuthorRepository();

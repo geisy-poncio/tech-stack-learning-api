@@ -1,9 +1,9 @@
 import { describe, expect, jest, test } from "@jest/globals";
-import { AuthorService } from "../src/service/AuthorService";
-import { AuthorRepository } from "../src/repository/AuthorRepository";
-import { apiStatusCode } from "../src/util/apiStatusCode";
-import { Output } from "../src/util/Output";
-import { authorEntities } from "./mocks/databaseEntities";
+import { AuthorService } from "../../src/service/AuthorService";
+import { AuthorRepository } from "../../src/repository/AuthorRepository";
+import { apiStatusCode } from "../../src/util/apiStatusCode";
+import { Output } from "../../src/util/Output";
+import { authorEntities } from "../mocks/databaseEntities";
 
 describe("AuthorService", () => {
     const authorRepository = new AuthorRepository();
@@ -20,7 +20,7 @@ describe("AuthorService", () => {
         test("Should return SUCCESS and the saved author if author does not exist", async () => {
             jest.spyOn(authorRepository, "getAuthorByName").mockResolvedValue(null);
             jest.spyOn(authorRepository, "saveAuthor").mockResolvedValue(authorEntities);
-            const output = await authorService.createAuthor("John Doe")
+            const output = await authorService.createAuthor("John Doe");
 
             expect(output.apiStatusCode).toEqual(apiStatusCode.SUCCESS);
             expect(output.data).toEqual(authorEntities);
