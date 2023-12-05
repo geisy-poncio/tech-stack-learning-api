@@ -51,7 +51,7 @@ describe("AuthorRepository", () => {
         test("Should update the author", async () => {
             jest.spyOn(prisma.author, "update").mockResolvedValue(authorEntities);
             const output = await authorRepository.updateAuthor("1", "Jane Doe");
-            console.log(output);
+            
             expect(output).toEqual(authorEntities);
         })
     })
