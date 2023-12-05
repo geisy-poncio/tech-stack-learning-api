@@ -115,7 +115,7 @@ app.put("/authors/:id", async (request, response, next) => {
             })
         }
     
-        response.status(201).json({ 
+        response.status(200).json({ 
             message: "Author updated successfully",
             apiStatusCode: output.apiStatusCode,
             data: output.data
@@ -140,7 +140,7 @@ app.delete("/authors/:id", async (request, response, next) => {
             })
         }
     
-        response.status(201).json({ 
+        response.status(200).json({ 
             message: "Author successfully deleted",
             apiStatusCode: output.apiStatusCode,
             data: output.data
