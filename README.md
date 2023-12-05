@@ -1,11 +1,11 @@
 # Registro de livros e autores
-    Esse projeto consiste em uma API REST de registro de livros e autores. As principais tecnologias utilizadas são: TypeScript, Node.js, Express, Prisma e Docker Compose.
+Esse projeto consiste em uma API REST de registro de livros e autores. As principais tecnologias utilizadas são: TypeScript, Node.js, Express, Prisma e Docker Compose.
 
 ### Requisitos: 
 - Possuir o [Docker](https://www.docker.com/products/docker-desktop/) instalado em seu sistema.
 
 
-# Índice 
+## Índice 
 
 * [Instruções iniciais](#instruções-iniciais)
 * [Entidade Autores](#bust_in_silhouette-autores)
