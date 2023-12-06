@@ -47,20 +47,20 @@ describe("AuthorRepository", () => {
         })
     })
 
-    describe("updateAuthor", () => {
+    describe("updateAuthorById", () => {
         test("Should update the author", async () => {
             jest.spyOn(prisma.author, "update").mockResolvedValue(authorEntities);
-            const output = await authorRepository.updateAuthor("1", "Jane Doe");
+            const output = await authorRepository.updateAuthorById("1", "Jane Doe");
             
             expect(output).toEqual(authorEntities);
         })
     })
 
-    describe("deleteAuthor", () => {
+    describe("deleteAuthorById", () => {
         authorEntities.isDeleted = true;
         test("Should update isDeleted to true", async () => {
             jest.spyOn(prisma.author, "update").mockResolvedValue(authorEntities);
-            const output = await authorRepository.updateAuthor("1", "John Doe");
+            const output = await authorRepository.deleteAuthorById("1");
 
             expect(output).toEqual(authorEntities);
             expect(output.isDeleted).toEqual(true);

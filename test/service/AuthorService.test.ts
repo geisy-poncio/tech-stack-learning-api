@@ -60,23 +60,23 @@ describe("AuthorService", () => {
         })
     })
 
-    describe("updateAuthor", () => {
+    describe("updateAuthorById", () => {
         test("Should update the author if the author is found", async () => {
             jest.spyOn(authorService, "getAuthorById").mockResolvedValue(new Output(apiStatusCode.SUCCESS));
-            jest.spyOn(authorRepository, "updateAuthor").mockResolvedValue(authorEntities);
-            const output = await authorService.updateAuthor("1", "John Doe");
+            jest.spyOn(authorRepository, "updateAuthorById").mockResolvedValue(authorEntities);
+            const output = await authorService.updateAuthorById("1", "John Doe");
 
             expect(output.apiStatusCode).toEqual(apiStatusCode.SUCCESS);
             expect(output.data).toEqual(authorEntities);
         })
     })
 
-    describe("deleteAuthor", () => {
+    describe("deleteAuthorById", () => {
         test("Should update isDeleted to true when deleting the author", async () => {
             authorEntities.isDeleted = true;
             jest.spyOn(authorService, "getAuthorById").mockResolvedValue(new Output(apiStatusCode.SUCCESS));
-            jest.spyOn(authorRepository, "deleteAuthor").mockResolvedValue(authorEntities);
-            const output = await authorService.deleteAuthor("1");
+            jest.spyOn(authorRepository, "deleteAuthorById").mockResolvedValue(authorEntities);
+            const output = await authorService.deleteAuthorById("1");
 
             expect(output.apiStatusCode).toEqual(apiStatusCode.SUCCESS);
             expect(output.data).toEqual(authorEntities);

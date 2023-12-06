@@ -38,21 +38,21 @@ describe("BookRepository", () => {
         })
     })
 
-    describe("updateBook", () => {
+    describe("updateBookById", () => {
         test("Should update the book", async () => {
             jest.spyOn(prisma.book, "update").mockResolvedValue(bookEntities);
-            const output = await bookRepository.updateBook("1", "John Doe Book", "1");
+            const output = await bookRepository.updateBookById("1", "John Doe Book", "1");
 
             expect(output).toEqual(bookEntities);
         })
     })
 
-    describe("deleteBook", () => {
+    describe("deleteBookById", () => {
         bookEntities.isDeleted = true;
 
         test("Should update isDeleted to true", async () => {
             jest.spyOn(prisma.book, "update").mockResolvedValue(bookEntities);
-            const output = await bookRepository.deleteBook("1");
+            const output = await bookRepository.deleteBookById("1");
 
             expect(output).toEqual(bookEntities);
             expect(output.isDeleted).toEqual(true);

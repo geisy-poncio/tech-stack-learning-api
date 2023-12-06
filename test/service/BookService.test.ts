@@ -3,25 +3,27 @@ import { BookService } from "../../src/service/BookService";
 import { BookRepository } from "../../src/repository/BookRepository";
 import { apiStatusCode } from "../../src/util/apiStatusCode";
 import { bookEntities } from "../mocks/databaseEntities";
-import { authorEntities } from "../mocks/databaseEntities";
 import { bookAuthorEntities } from "../mocks/databaseEntities";
 import { AuthorRepository } from "../../src/repository/AuthorRepository";
+import { AuthorService } from "../../src/service/AuthorService";
+import { Output } from "../../src/util/Output";
 
 describe("BookService", () => {
     const authorRepository = new AuthorRepository();
+    const authorService = new AuthorService(authorRepository);
     const bookRepository = new BookRepository();
-    const bookService = new BookService(bookRepository, authorRepository);
+    const bookService = new BookService(bookRepository, authorService);
 
     describe("createBook", () => {
         test("Should return AUTHOR_DOES_NOT_EXIST if the author is not found", async () => {
-            jest.spyOn(authorRepository, "getAuthorById").mockResolvedValue(null);
+            jest.spyOn(authorService, "getAuthorById").mockResolvedValue(new Output(apiStatusCode.AUTHOR_DOES_NOT_EXIST));
             const output = await bookService.createBook("Jane Doe Book", "1");
             
             expect(output.apiStatusCode).toEqual(apiStatusCode.AUTHOR_DOES_NOT_EXIST);
         }) 
 
         test("Should return SUCCESS and the book saved if there is an author", async () => {
-            jest.spyOn(authorRepository, "getAuthorById").mockResolvedValue(authorEntities);
+            jest.spyOn(authorService, "getAuthorById").mockResolvedValue(new Output(apiStatusCode.SUCCESS));
             jest.spyOn(bookRepository, "saveBook").mockResolvedValue(bookEntities);
             const output = await bookService.createBook("Jane Doe Book", "1");
 
@@ -61,22 +63,22 @@ describe("BookService", () => {
         })
     })
 
-    describe("updateBook", () => {
+    describe("updateBookById", () => {
         test("Should return SUCCESS and update the book", async () => {
-            jest.spyOn(bookRepository, "updateBook").mockResolvedValue(bookEntities);
-            const output = await bookService.updateBook("1", "John Doe Book", "1");
+            jest.spyOn(bookRepository, "updateBookById").mockResolvedValue(bookEntities);
+            const output = await bookService.updateBookById("1", "John Doe Book", "1");
 
             expect(output.apiStatusCode).toEqual(apiStatusCode.SUCCESS);
             expect(output.data).toEqual(bookEntities);
         })
     })
 
-    describe("deleteBook", () => {
+    describe("deleteBookById", () => {
         bookEntities.isDeleted = true;
 
         test("Should return SUCCESS and update isDeleted to true", async () => {
-            jest.spyOn(bookRepository, "deleteBook").mockResolvedValue(bookEntities);
-            const output = await bookService.deleteBook("1");
+            jest.spyOn(bookRepository, "deleteBookById").mockResolvedValue(bookEntities);
+            const output = await bookService.deleteBookById("1");
 
             expect(output.apiStatusCode).toEqual(apiStatusCode.SUCCESS);
             expect(output.data).toEqual(bookEntities);

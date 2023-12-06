@@ -6,11 +6,14 @@ import { apiStatusCode } from "../../src/util/apiStatusCode";
 import { bookEntities } from "../mocks/databaseEntities";
 import { Output } from "../../src/util/Output";
 import { AuthorRepository } from "../../src/repository/AuthorRepository";
+import { AuthorService } from "../../src/service/AuthorService"; 
 
 describe ("BookController", () => {
     const authorRepository = new AuthorRepository();
+    const authorService = new AuthorService(authorRepository);
+    
     const bookRepository = new BookRepository();
-    const bookService = new BookService(bookRepository, authorRepository);
+    const bookService = new BookService(bookRepository, authorService);
     const bookController = new BookController(bookService);
 
     describe("createBook", () => {
@@ -43,20 +46,20 @@ describe ("BookController", () => {
         })
     })
 
-    describe("updateBook", () => {
+    describe("updateBookById", () => {
         test("Should return SUCCESS when updating book", async () => {
-            jest.spyOn(bookService, "updateBook").mockResolvedValue(new Output(apiStatusCode.SUCCESS, bookEntities));
-            const output = await bookController.updateBook("1", "John Doe Book", "1");
+            jest.spyOn(bookService, "updateBookById").mockResolvedValue(new Output(apiStatusCode.SUCCESS, bookEntities));
+            const output = await bookController.updateBookById("1", "John Doe Book", "1");
 
             expect(output.apiStatusCode).toEqual(apiStatusCode.SUCCESS);
             expect(output.data).toEqual(bookEntities);
         })
     })
 
-    describe("deleteBook", () => {
+    describe("deleteBookById", () => {
         test("Should return SUCCESS when deleting book", async () => {
-            jest.spyOn(bookService, "deleteBook").mockResolvedValue(new Output(apiStatusCode.SUCCESS, bookEntities));
-            const output = await bookController.deleteBook("1");
+            jest.spyOn(bookService, "deleteBookById").mockResolvedValue(new Output(apiStatusCode.SUCCESS, bookEntities));
+            const output = await bookController.deleteBookById("1");
 
             expect(output.apiStatusCode).toEqual(apiStatusCode.SUCCESS);
             expect(output.data).toEqual(bookEntities);

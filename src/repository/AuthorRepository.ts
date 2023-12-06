@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client'
 export const prisma = new PrismaClient();
 
 export class AuthorRepository{
-    async saveAuthor (input: {name: string}) {
+    async saveAuthor(input: {name: string}) {
         try {
             console.log("AuthorRepository::saveAuthor::Saving author");
             const newAuthor = await prisma.author.create({
@@ -18,7 +18,7 @@ export class AuthorRepository{
         } 
     }
 
-    async getAuthorByName (nameAuthor: string) {
+    async getAuthorByName(nameAuthor: string) {
         console.log("AuthorRepository::getAuthorByName::Looking for author");
         const authorByName = await prisma.author.findFirst({
             where: {
@@ -29,7 +29,7 @@ export class AuthorRepository{
         return authorByName;
     }
 
-    async getAllAuthors () {
+    async getAllAuthors() {
         console.log("AuthorRepository::getAllAuthors::Looking for authors");
         const allAuthors = await prisma.author.findMany({ 
             where: { 
@@ -39,7 +39,7 @@ export class AuthorRepository{
         return allAuthors;
      }
 
-    async getAuthorById (authorId: string) {
+    async getAuthorById(authorId: string) {
         console.log("AuthorRepository::getAuthorById::Looking for author");
         const authorById = await prisma.author.findFirst({ 
             where: { 
@@ -50,8 +50,8 @@ export class AuthorRepository{
         return authorById;
     }
 
-    async updateAuthor (authorId: string, nameAuthor: string) {
-        console.log("AuthorRepository::updateAuthor::Updating author");
+    async updateAuthorById(authorId: string, nameAuthor: string) {
+        console.log("AuthorRepository::updateAuthorById::Updating author");
         const updateAuthor = await prisma.author.update({
             where: { id: authorId },
             data: { 
@@ -61,8 +61,8 @@ export class AuthorRepository{
         return updateAuthor;
     }
 
-    async deleteAuthor (authorId: string) {
-        console.log("AuthorRepository::deleteAuthor::Excluding author");
+    async deleteAuthorById(authorId: string) {
+        console.log("AuthorRepository::deleteAuthorById::Excluding author");
         const deleteAuthor = await prisma.author.update({
             where: { id: authorId },
             data: {

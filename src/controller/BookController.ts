@@ -20,13 +20,13 @@ export class BookController{
         return await this.bookService.getAllBooks();
     }
 
-    async updateBook(bookId: string, name: string, authorId: string) {
+    async updateBookById(bookId: string, name: string, authorId: string) {
         console.log("BookController::updateBook::Request received");
-        return await this.bookService.updateBook(bookId, name, authorId);
+        return await this.bookService.updateBookById(bookId, name, authorId);
     }
 
-    async deleteBook(bookId: string) {
+    async deleteBookById(bookId: string) {
         console.log("BookController::deleteBook::Request received");
-        return await this.bookService.deleteBook(bookId);
+        return await this.bookService.deleteBookById(bookId);
     }
 }

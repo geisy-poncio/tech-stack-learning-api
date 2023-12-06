@@ -16,7 +16,7 @@ const authorService = new AuthorService(authorRepository);
 const authorController = new AuthorController(authorService);
 
 const bookRepository = new BookRepository();
-const bookService = new BookService(bookRepository, authorRepository);
+const bookService = new BookService(bookRepository, authorService);
 const bookController = new BookController(bookService);
 
 app.post("/authors",  async (request, response, next) => {
@@ -106,7 +106,7 @@ app.put("/authors/:id", async (request, response, next) => {
 
     try{
         console.log("index::PUT/authors/:id::Sending data to update author");
-        const output = await authorController.updateAuthor(idAuthor, authorName);
+        const output = await authorController.updateAuthorById(idAuthor, authorName);
 
         if (output.apiStatusCode === apiStatusCode.AUTHOR_DOES_NOT_EXIST){
             return response.status(404).json({
@@ -131,7 +131,7 @@ app.delete("/authors/:id", async (request, response, next) => {
 
     try{
         console.log("index::DELETE/authors/:id::Sending data to delete author");
-        const output = await authorController.deleteAuthor(idAuthor);
+        const output = await authorController.deleteAuthorById(idAuthor);
 
         if (output.apiStatusCode === apiStatusCode.AUTHOR_DOES_NOT_EXIST){
             return response.status(404).json({
@@ -156,7 +156,7 @@ app.post("/books", async (request, response, next) => {
 
     if (name === undefined || authorId === undefined) {
         return response.status(400).json({
-            message: "Invalid Input",
+            message: "Invalid Input", 
             apiStatusCode: apiStatusCode.INVALID_INPUT
         });
     }
@@ -237,7 +237,7 @@ app.put("/books/:id", async (request, response, next) => {
 
     try{
         console.log("index::PUT/books/:id::Request being sent");
-        const output = await bookController.updateBook(bookId, name, authorId);
+        const output = await bookController.updateBookById(bookId, name, authorId);
 
         if (output.apiStatusCode === apiStatusCode.BOOK_DOES_NOT_EXIST) {
             return response.status(404).json({
@@ -268,7 +268,7 @@ app.delete("/books/:id", async (request, response, next) => {
     
     try{
         console.log("index::DELETE/books/:id::Request being sent");
-        const output = await bookController.deleteBook(bookId);
+        const output = await bookController.deleteBookById(bookId);
 
         if (output.apiStatusCode === apiStatusCode.BOOK_DOES_NOT_EXIST) {
             return response.status(404).json({
@@ -288,7 +288,7 @@ app.delete("/books/:id", async (request, response, next) => {
 })
 
 const errorHandler: ErrorRequestHandler = ((error, request, response, next) => {
-    console.log(error.message)
+    console.error(error.message)
     return response.status(500).json({
         message: "Internal error",
         apiStatusCode: apiStatusCode.INTERNAL_ERROR
