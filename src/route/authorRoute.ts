@@ -3,6 +3,7 @@ import { AuthorService } from "../service/AuthorService";
 import { AuthorRepository } from "../repository/AuthorRepository";  
 import { AuthorController } from "../controller/AuthorController";
 import { apiStatusCode } from "../util/apiStatusCode"; 
+import { createAuthorValidator, getAuthorByIdValidator, updateAuthorByIdValidator, deleteAuthorByIdValidator } from "../middleware/authorMiddleware";
 
 const authorRepository = new AuthorRepository();
 const authorService = new AuthorService(authorRepository);
@@ -11,18 +12,13 @@ const authorController = new AuthorController(authorService)
 const router = express.Router();
 
 export function authorRoute() {
-    router.post("/authors",  async (request, response, next) => {
+    router.post("/authors",   createAuthorValidator, async (request, response, next) => {
         const { authorName } = request.body;
-    
-        if (authorName === undefined) {
-            return response.status(400).json({
-                message: "Invalid Input",
-                apiStatusCode: apiStatusCode.INVALID_INPUT
-            });
-        }
+
         try {
             const output = await authorController.createAuthor(authorName);
             if (output.apiStatusCode === apiStatusCode.AUTHOR_EXISTS){
+                console.warn("index::createAuthor::author exists");
                 return response.status(409).json({
                     message: "Author already exists",
                     apiStatusCode: output.apiStatusCode
@@ -34,13 +30,13 @@ export function authorRoute() {
                 apiStatusCode: output.apiStatusCode,
                 data: output.data
             });
-    
+
         } catch (err) {
             next(err);
         }
     })
     
-    router.get("/authors/:id", async (request, response, next) => {
+    router.get("/authors/:id", getAuthorByIdValidator, async (request, response, next) => {
         const authorId = request.params.id;
     
         try {
@@ -81,17 +77,10 @@ export function authorRoute() {
         }
     })
     
-    router.put("/authors/:id", async (request, response, next) => {
+    router.put("/authors/:id", updateAuthorByIdValidator, async (request, response, next) => {
         const idAuthor = request.params.id;
         const { authorName } = request.body; 
-    
-        if (authorName === undefined) {
-            return response.status(400).json({
-                message: "Invalid Input",
-                apiStatusCode: apiStatusCode.INVALID_INPUT
-            });
-        }
-    
+ 
         try{
             const output = await authorController.updateAuthorById(idAuthor, authorName);
     
@@ -113,7 +102,7 @@ export function authorRoute() {
         }
     })
     
-    router.delete("/authors/:id", async (request, response, next) => {
+    router.delete("/authors/:id", deleteAuthorByIdValidator, async (request, response, next) => {
         const idAuthor = request.params.id;
     
         try{

@@ -1,9 +1,9 @@
-import express from "express"
+import express from "express";
 import { bookRoute } from "./route/bookRoute"; 
 import { errorHandler } from "./middleware/errorHandler";
 import { authorRoute } from "./route/authorRoute"; 
 
-export const app = express()
+export const app = express();
 
 app.use(express.json());
 
