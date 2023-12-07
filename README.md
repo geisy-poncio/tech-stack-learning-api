@@ -116,6 +116,7 @@ Retorna o autor. Exemplo para status 200:
 }
 ```
 Outros status possíveis são:
+- 400: Invalid Input - Quando o ID não está correto;
 - 404: Author not found - Quando o autor não está cadastrado.
 
 ### GET All Authors
@@ -182,8 +183,8 @@ Retorna o autor atualizado. Exemplo para status 200:
     }
 }
 ```
-Outro possíveis status:
-- 400: Invalid Input - Quando a entrada de authorName não é feita corretamente.
+Outro possíveis status:.
+- 400: Invalid Input - Quando a entrada de authorName não é feita corretamente ou quando o ID não está correto;
 - 404: Author not found - Quando o autor não está cadastrado.
 
 ### DELETE Author
@@ -211,6 +212,7 @@ Retorna o autor deletado. Exemplo para status 200:
 }
 ```
 Outro possíveis status:
+- 400: Invalid Input - Quando o ID não está correto;
 - 404: Author not found - Quando o autor não está cadastrado.
 
 ## :books: Livros
@@ -296,6 +298,7 @@ Retorna o livro, com os dados do autor relacionado. Exemplo para status 200:
 }
 ```
 Outros possíveis status:
+- 400: Invalid Input - Quando o ID não está correto;
 - 404: Book not found - Quando o livro não está cadastrado.
 
 ### GET All Books
@@ -373,7 +376,7 @@ Retorna o livro atualizado. Exemplo para status 200:
 }
 ```
 Outros possíveis status:
-- 400: Invalid Input: Quando a entrada de name ou authorId não é feita corretamente;
+- 400: Invalid Input: Quando a entrada de name ou authorId não é feita corretamente, ou quando o ID não está correto;
 - 404: Book not found: Quando o livro não está cadastrado;
 - 404: Author not found: Quando o autor não está cadastrado.
 
@@ -402,6 +405,7 @@ Retorna o livro deletado. Exemplo para status 200:
 }
 ```
 Outros possíveis status:
+- 400: Invalid Input - Quando o ID não está correto;
 - 404: Book not found - Quando o livro não está cadastrado.
 
 ## Referências
