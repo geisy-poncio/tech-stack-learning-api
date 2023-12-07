@@ -48,9 +48,9 @@ export class BookService {
         }
 
         const findAuthor = await this.authorService.getAuthorById(authorId);
-        if (!findAuthor) {
+        if (findAuthor.apiStatusCode === apiStatusCode.AUTHOR_DOES_NOT_EXIST) {
             console.warn("BookService::updateBookById::Author does not exists");
-            return new Output(apiStatusCode.AUTHOR_DOES_NOT_EXIST);
+            return findAuthor;
         }
 
         console.log("BookService::updateBookById::Forwarding for update");
