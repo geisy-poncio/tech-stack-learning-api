@@ -5,15 +5,23 @@ import { Output } from "../../src/util/Output";
 import { authorEntities } from "../mocks/databaseEntities";
 import { AuthorRepositoryInterface } from "../../src/repository/AuthorRepositoryInterface";
 import { mock } from "jest-mock-extended";
+import { 
+    CreateAuthorDtoInput, 
+    GetAuthorByIdDtoInput, 
+    UpdateAuthorByIdDtoInput, 
+    DeleteAuthorByIdDtoInput 
+} from "../../src/dto/authorDTO";
 
 describe("AuthorService", () => {
     const authorRepository = mock<AuthorRepositoryInterface>();
     const authorService = new AuthorService(authorRepository);
 
     describe("createAuthor", () => {
+        const createAuthorDtoInput = new CreateAuthorDtoInput("John Doe"); 
+
         test("Should return AUTHOR_EXISTS if author with the same name already exists", async () => {
             jest.spyOn(authorRepository, "getAuthorByName").mockResolvedValue(authorEntities);
-            const output = await authorService.createAuthor("John Doe");
+            const output = await authorService.createAuthor(createAuthorDtoInput);
 
             expect(output.apiStatusCode).toEqual(apiStatusCode.AUTHOR_EXISTS);
         })
@@ -21,7 +29,7 @@ describe("AuthorService", () => {
         test("Should return SUCCESS and the saved author if author does not exist", async () => {
             jest.spyOn(authorRepository, "getAuthorByName").mockResolvedValue(null);
             jest.spyOn(authorRepository, "saveAuthor").mockResolvedValue(authorEntities);
-            const output = await authorService.createAuthor("John Doe");
+            const output = await authorService.createAuthor(createAuthorDtoInput);
 
             expect(output.apiStatusCode).toEqual(apiStatusCode.SUCCESS);
             expect(output.data).toEqual(authorEntities);
@@ -29,9 +37,11 @@ describe("AuthorService", () => {
     })
 
     describe("getAuthorById", () => {
+        const getAuthorByIdDtoInput = new GetAuthorByIdDtoInput("1");
+
         test("Should return AUTHOR_DOES_NOT_EXIST if the author is not found", async () => {
             jest.spyOn(authorRepository, "getAuthorById").mockResolvedValue(null);
-            const output = await authorService.getAuthorById("1");
+            const output = await authorService.getAuthorById(getAuthorByIdDtoInput);
             
             expect(output.apiStatusCode).toEqual(apiStatusCode.AUTHOR_DOES_NOT_EXIST);
             expect(output.data).toEqual(undefined);
@@ -39,7 +49,7 @@ describe("AuthorService", () => {
 
         test("Should return the author if the author is found", async () => {
             jest.spyOn(authorRepository, "getAuthorById").mockResolvedValue(authorEntities);
-            const output = await authorService.getAuthorById("1");
+            const output = await authorService.getAuthorById(getAuthorByIdDtoInput);
             
             expect(output.apiStatusCode).toEqual(apiStatusCode.SUCCESS);
             expect(output.data).toEqual(authorEntities);
@@ -62,10 +72,12 @@ describe("AuthorService", () => {
     })
 
     describe("updateAuthorById", () => {
+        const updateAuthorByIdDtoInput = new UpdateAuthorByIdDtoInput("1", "John Doe");
+
         test("Should update the author if the author is found", async () => {
             jest.spyOn(authorService, "getAuthorById").mockResolvedValue(new Output(apiStatusCode.SUCCESS));
             jest.spyOn(authorRepository, "updateAuthorById").mockResolvedValue(authorEntities);
-            const output = await authorService.updateAuthorById("1", "John Doe");
+            const output = await authorService.updateAuthorById(updateAuthorByIdDtoInput);
 
             expect(output.apiStatusCode).toEqual(apiStatusCode.SUCCESS);
             expect(output.data).toEqual(authorEntities);
@@ -73,11 +85,13 @@ describe("AuthorService", () => {
     })
 
     describe("deleteAuthorById", () => {
+        const deleteAuthorByIdDtoInput = new DeleteAuthorByIdDtoInput("1");
+
         test("Should update isDeleted to true when deleting the author", async () => {
             authorEntities.isDeleted = true;
             jest.spyOn(authorService, "getAuthorById").mockResolvedValue(new Output(apiStatusCode.SUCCESS));
             jest.spyOn(authorRepository, "deleteAuthorById").mockResolvedValue(authorEntities);
-            const output = await authorService.deleteAuthorById("1");
+            const output = await authorService.deleteAuthorById(deleteAuthorByIdDtoInput);
 
             expect(output.apiStatusCode).toEqual(apiStatusCode.SUCCESS);
             expect(output.data).toEqual(authorEntities);
