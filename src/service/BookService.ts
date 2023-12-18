@@ -1,11 +1,11 @@
-import { BookRepository } from "../repository/BookRepository";
+import { BookRepositoryInterface } from "../repository/BookRepositoryInterface";
 import { apiStatusCode } from "../util/apiStatusCode";
 import { Output } from "../util/Output";
 import { AuthorService } from "./AuthorService";
 
 export class BookService {
     constructor(
-        private readonly bookRepository: BookRepository,
+        private readonly bookRepository: BookRepositoryInterface,
         private readonly authorService: AuthorService   
     ) {}
 

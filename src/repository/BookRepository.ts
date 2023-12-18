@@ -1,8 +1,9 @@
 import { PrismaClient } from '@prisma/client'
+import { BookRepositoryInterface } from './BookRepositoryInterface';
 
 export const prisma = new PrismaClient();
 
-export class BookRepository{
+export class BookRepository implements BookRepositoryInterface{
     async saveBook(input: {name: string, authorId: string}) {
         console.log("BookRepository::saveBook::Saving book");
         const newBook = await prisma.book.create({
