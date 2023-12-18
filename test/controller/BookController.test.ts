@@ -1,18 +1,19 @@
 import { describe, expect, jest, test } from "@jest/globals";
-import { BookRepository } from "../../src/repository/BookRepository";
+import { BookRepositoryInterface } from "../../src/repository/BookRepositoryInterface"; 
 import { BookService } from "../../src/service/BookService";
 import { BookController } from "../../src/controller/BookController";
 import { apiStatusCode } from "../../src/util/apiStatusCode";
 import { bookEntities } from "../mocks/databaseEntities";
 import { Output } from "../../src/util/Output";
-import { AuthorRepository } from "../../src/repository/AuthorRepository";
+import { AuthorRepositoryInterface } from "../../src/repository/AuthorRepositoryInterface"; 
 import { AuthorService } from "../../src/service/AuthorService"; 
+import { mock } from "jest-mock-extended";
 
 describe ("BookController", () => {
-    const authorRepository = new AuthorRepository();
+    const authorRepository = mock<AuthorRepositoryInterface>();
     const authorService = new AuthorService(authorRepository);
     
-    const bookRepository = new BookRepository();
+    const bookRepository = mock<BookRepositoryInterface>();
     const bookService = new BookService(bookRepository, authorService);
     const bookController = new BookController(bookService);
 
