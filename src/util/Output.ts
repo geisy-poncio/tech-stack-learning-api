@@ -5,6 +5,5 @@ export class Output {
         public readonly apiStatusCode: apiStatusCode,
         public readonly data?: any
     ){
-
     }
 }

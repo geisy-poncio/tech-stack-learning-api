@@ -1,8 +1,9 @@
 import { PrismaClient } from "@prisma/client";
+import { AuthorRepositoryInterface } from "./AuthorRepositoryInterface";
 
 export const prisma = new PrismaClient();
 
-export class AuthorRepository{
+export class AuthorRepository implements AuthorRepositoryInterface {
     async saveAuthor(input: {name: string}) {
         try {
             console.log("AuthorRepository::saveAuthor::Saving author");
@@ -45,6 +46,13 @@ export class AuthorRepository{
             where: { 
                 id: authorId, 
                 isDeleted: false 
+            },
+            include: {
+                books: {
+                    where: {
+                      isDeleted: false,
+                    }
+                }
             } 
         });
         return authorById;
@@ -75,7 +83,10 @@ export class AuthorRepository{
                                 books: {
                                     updateMany: {
                                         where: {authorId: args.where.id},
-                                        data: {isDeleted: true}
+                                        data: {
+                                            isDeleted: true,
+                                            deletedAt: new Date()
+                                        }
                                     }
                                 }
                             },
@@ -86,13 +97,16 @@ export class AuthorRepository{
                     async delete({model, operation, args, query}){
                         return await prisma.book.update({
                             where: args.where,
-                            data: {isDeleted: true}
+                            data: {
+                                isDeleted: true,
+                                deletedAt: new Date()
+                            }
                         })
                     }
                 }
             }
         })
 
-        await extendedPrisma.author.delete({ where: {id: authorId}})
+        return await extendedPrisma.author.delete({ where: {id: authorId}});
     }
 }

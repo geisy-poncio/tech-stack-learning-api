@@ -1,10 +1,10 @@
-import { AuthorRepository } from "../repository/AuthorRepository";
+import { AuthorRepositoryInterface } from "../repository/AuthorRepositoryInterface";
 import { apiStatusCode } from "../util/apiStatusCode";
 import { Output } from "../util/Output";
 
 export class AuthorService {
     constructor(
-        private readonly  authorRepository: AuthorRepository
+        private readonly authorRepository: AuthorRepositoryInterface
     ) {}
 
     async createAuthor(name: string): Promise<Output> {
