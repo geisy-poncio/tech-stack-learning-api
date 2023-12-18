@@ -1,15 +1,22 @@
 import { PrismaClient } from "@prisma/client";
 import { AuthorRepositoryInterface } from "./AuthorRepositoryInterface";
+import { 
+    CreateAuthorDtoInput,
+    GetAuthorByNameDtoInput,
+    GetAuthorByIdDtoInput,
+    UpdateAuthorByIdDtoInput,
+    DeleteAuthorByIdDtoInput 
+} from "../dto/authorDTO";
 
 export const prisma = new PrismaClient();
 
 export class AuthorRepository implements AuthorRepositoryInterface {
-    async saveAuthor(input: {name: string}) {
+    async saveAuthor(createAuthorDtoInput: CreateAuthorDtoInput) {
         try {
             console.log("AuthorRepository::saveAuthor::Saving author");
             const newAuthor = await prisma.author.create({
                 data: {
-                    name: input.name
+                    name: createAuthorDtoInput.name
                 }
             });
             return newAuthor;
@@ -19,11 +26,11 @@ export class AuthorRepository implements AuthorRepositoryInterface {
         } 
     }
 
-    async getAuthorByName(nameAuthor: string) {
+    async getAuthorByName(getAuthorByNameDtoInput: GetAuthorByNameDtoInput) {
         console.log("AuthorRepository::getAuthorByName::Looking for author");
         const authorByName = await prisma.author.findFirst({
             where: {
-              name: nameAuthor,
+              name: getAuthorByNameDtoInput.name,
               isDeleted: false
             }
         });
@@ -40,11 +47,11 @@ export class AuthorRepository implements AuthorRepositoryInterface {
         return allAuthors;
      }
 
-    async getAuthorById(authorId: string) {
+    async getAuthorById(getAuthorByIdDtoInput: GetAuthorByIdDtoInput) {
         console.log("AuthorRepository::getAuthorById::Looking for author");
         const authorById = await prisma.author.findFirst({ 
             where: { 
-                id: authorId, 
+                id: getAuthorByIdDtoInput.id, 
                 isDeleted: false 
             },
             include: {
@@ -58,18 +65,19 @@ export class AuthorRepository implements AuthorRepositoryInterface {
         return authorById;
     }
 
-    async updateAuthorById(authorId: string, nameAuthor: string) {
+    async updateAuthorById(updateAuthorByIdDtoInput: UpdateAuthorByIdDtoInput) {
         console.log("AuthorRepository::updateAuthorById::Updating author");
+        
+        const { id, name } = updateAuthorByIdDtoInput;
+
         const updateAuthor = await prisma.author.update({
-            where: { id: authorId },
-            data: { 
-                name: nameAuthor
-            }
+            where: { id: id },
+            data: { name: name }
         });
         return updateAuthor;
     }
 
-    async deleteAuthorById(authorId: string) {
+    async deleteAuthorById(deleteAuthorByIdDtoInput: DeleteAuthorByIdDtoInput) {
         console.log("AuthorRepository::deleteAuthorById::Excluding author");
         const extendedPrisma = prisma.$extends({
             name: "softDelete",
@@ -80,6 +88,7 @@ export class AuthorRepository implements AuthorRepositoryInterface {
                             where: {id: args.where.id},
                             data: {
                                 isDeleted: true,
+                                deletedAt: new Date(),
                                 books: {
                                     updateMany: {
                                         where: {authorId: args.where.id},
@@ -107,6 +116,6 @@ export class AuthorRepository implements AuthorRepositoryInterface {
             }
         })
 
-        return await extendedPrisma.author.delete({ where: {id: authorId}});
+        return await extendedPrisma.author.delete({ where: {id: deleteAuthorByIdDtoInput.id}});
     }
 }

@@ -1,18 +1,24 @@
 import { AuthorService } from "../service/AuthorService";
+import { 
+    CreateAuthorDtoInput, 
+    GetAuthorByIdDtoInput, 
+    UpdateAuthorByIdDtoInput, 
+    DeleteAuthorByIdDtoInput 
+} from "../dto/authorDTO";
 
 export class AuthorController{
     constructor(
         private readonly authorService: AuthorService
     ) {}
 
-    async createAuthor(name: string) {
+    async createAuthor(createAuthorDtoInput: CreateAuthorDtoInput) {
         console.log("AuthorController::createAuthor::Request received");
-        return await this.authorService.createAuthor(name);
+        return await this.authorService.createAuthor(createAuthorDtoInput);
     }
 
-    async getAuthorById(authorId: string){
+    async getAuthorById(getAuthorByIdDtoInput: GetAuthorByIdDtoInput){
         console.log("AuthorController::getAuthorById::Request received");
-        return await this.authorService.getAuthorById(authorId);
+        return await this.authorService.getAuthorById(getAuthorByIdDtoInput);
     }
 
     async getAllAuthors(){
@@ -20,13 +26,13 @@ export class AuthorController{
         return await this.authorService.getAllAuthors();
     }
 
-    async updateAuthorById(authorId: string, nameAuthor: string) {
+    async updateAuthorById(updateAuthorByIdDtoInput: UpdateAuthorByIdDtoInput) {
         console.log("AuthorController::updateAuthorById::Request received");
-        return await this.authorService.updateAuthorById(authorId, nameAuthor);
+        return await this.authorService.updateAuthorById(updateAuthorByIdDtoInput);
     }
 
-    async deleteAuthorById(authorId: string) {
+    async deleteAuthorById(deleteAuthorByIdDtoInput: DeleteAuthorByIdDtoInput) {
         console.log("AuthorController::deleteAuthorById::Request received");
-        return await this.authorService.deleteAuthorById(authorId);
+        return await this.authorService.deleteAuthorById(deleteAuthorByIdDtoInput);
     }
 }

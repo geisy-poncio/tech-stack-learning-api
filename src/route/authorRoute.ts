@@ -3,20 +3,31 @@ import { AuthorService } from "../service/AuthorService";
 import { AuthorRepository } from "../repository/AuthorRepository";  
 import { AuthorController } from "../controller/AuthorController";
 import { apiStatusCode } from "../util/apiStatusCode"; 
-import { createAuthorValidator, getAuthorByIdValidator, updateAuthorByIdValidator, deleteAuthorByIdValidator } from "../middleware/authorMiddleware";
+import { 
+    createAuthorValidator, 
+    getAuthorByIdValidator, 
+    updateAuthorByIdValidator, 
+    deleteAuthorByIdValidator 
+} from "../middleware/authorMiddleware";
+
+import { 
+    CreateAuthorDtoInput, 
+    GetAuthorByIdDtoInput, 
+    UpdateAuthorByIdDtoInput, 
+    DeleteAuthorByIdDtoInput 
+} from "../dto/authorDTO";
 
 const authorRepository = new AuthorRepository();
 const authorService = new AuthorService(authorRepository);
-const authorController = new AuthorController(authorService)
+const authorController = new AuthorController(authorService);
 
 const router = express.Router();
 
 export function authorRoute() {
-    router.post("/authors",   createAuthorValidator, async (request, response, next) => {
-        const { authorName } = request.body;
-
+    router.post("/authors", createAuthorValidator, async (request, response, next) => {
         try {
-            const output = await authorController.createAuthor(authorName);
+            const createAuthorDtoInput = new CreateAuthorDtoInput(request.body.authorName);
+            const output = await authorController.createAuthor(createAuthorDtoInput);
             if (output.apiStatusCode === apiStatusCode.AUTHOR_EXISTS){
                 console.warn("index::createAuthor::author exists");
                 return response.status(409).json({
@@ -37,10 +48,9 @@ export function authorRoute() {
     })
     
     router.get("/authors/:id", getAuthorByIdValidator, async (request, response, next) => {
-        const authorId = request.params.id;
-    
         try {
-            const output = await authorController.getAuthorById(authorId);
+            const getAuthorByIdDtoInput = new GetAuthorByIdDtoInput(request.params.id)
+            const output = await authorController.getAuthorById(getAuthorByIdDtoInput);
     
             if (output.apiStatusCode === apiStatusCode.AUTHOR_DOES_NOT_EXIST) {
                 return response.status(404).json({
@@ -62,7 +72,6 @@ export function authorRoute() {
     })
     
     router.get("/authors", async (request, response, next) => {
-        
         try {
             const output = await authorController.getAllAuthors();
     
@@ -78,11 +87,9 @@ export function authorRoute() {
     })
     
     router.put("/authors/:id", updateAuthorByIdValidator, async (request, response, next) => {
-        const idAuthor = request.params.id;
-        const { authorName } = request.body; 
- 
         try{
-            const output = await authorController.updateAuthorById(idAuthor, authorName);
+            const updateAuthorByIdDtoInput = new UpdateAuthorByIdDtoInput(request.params.id, request.body.authorName)
+            const output = await authorController.updateAuthorById(updateAuthorByIdDtoInput);
     
             if (output.apiStatusCode === apiStatusCode.AUTHOR_DOES_NOT_EXIST){
                 return response.status(404).json({
@@ -102,11 +109,10 @@ export function authorRoute() {
         }
     })
     
-    router.delete("/authors/:id", deleteAuthorByIdValidator, async (request, response, next) => {
-        const idAuthor = request.params.id;
-    
+    router.delete("/authors/:id", deleteAuthorByIdValidator, async (request, response, next) => {    
         try{
-            const output = await authorController.deleteAuthorById(idAuthor);
+            const deleteAuthorByIdDtoInput = new DeleteAuthorByIdDtoInput(request.params.id)
+            const output = await authorController.deleteAuthorById(deleteAuthorByIdDtoInput);
     
             if (output.apiStatusCode === apiStatusCode.AUTHOR_DOES_NOT_EXIST){
                 return response.status(404).json({

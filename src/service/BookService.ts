@@ -11,7 +11,7 @@ export class BookService {
 
     async createBook(name: string, authorId: string): Promise<Output> {
         console.log("BookService::createBook::Forwarding the search to the author by id");
-        const findAuthor = await this.authorService.getAuthorById(authorId);
+        const findAuthor = await this.authorService.getAuthorById({ id: authorId });
 
         if (findAuthor.apiStatusCode === apiStatusCode.AUTHOR_DOES_NOT_EXIST) {
             console.warn("BookService::createBook::Author does not exists");
@@ -47,7 +47,7 @@ export class BookService {
             return findBook;
         }
 
-        const findAuthor = await this.authorService.getAuthorById(authorId);
+        const findAuthor = await this.authorService.getAuthorById({ id: authorId });
         if (findAuthor.apiStatusCode === apiStatusCode.AUTHOR_DOES_NOT_EXIST) {
             console.warn("BookService::updateBookById::Author does not exists");
             return findAuthor;

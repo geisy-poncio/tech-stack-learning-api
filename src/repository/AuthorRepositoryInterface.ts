@@ -1,10 +1,17 @@
-import { AuthorDtoOutput } from "../dto/authorDTO";
+import { 
+    AuthorDtoOutput,
+    CreateAuthorDtoInput,
+    GetAuthorByNameDtoInput,
+    GetAuthorByIdDtoInput,
+    UpdateAuthorByIdDtoInput,
+    DeleteAuthorByIdDtoInput 
+} from "../dto/authorDTO";
 
 export interface AuthorRepositoryInterface{
-    saveAuthor(input: {name: string}): Promise<AuthorDtoOutput>;
-    getAuthorByName(nameAuthor: string): Promise<AuthorDtoOutput| null>;
+    saveAuthor(createAuthorDtoInput: CreateAuthorDtoInput): Promise<AuthorDtoOutput>;
+    getAuthorByName(getAuthorByNameDtoInput: GetAuthorByNameDtoInput): Promise<AuthorDtoOutput| null>;
     getAllAuthors(): Promise<AuthorDtoOutput[] | null>;
-    getAuthorById(authorId: string): Promise<AuthorDtoOutput | null>;
-    updateAuthorById(authorId: string, nameAuthor: string): Promise<AuthorDtoOutput>;
-    deleteAuthorById(authorId: string): Promise<AuthorDtoOutput>;
+    getAuthorById(getAuthorByIdDtoInput: GetAuthorByIdDtoInput): Promise<AuthorDtoOutput | null>;
+    updateAuthorById(updateAuthorByIdDtoInput: UpdateAuthorByIdDtoInput): Promise<AuthorDtoOutput>;
+    deleteAuthorById(deleteAuthorByIdDtoInput: DeleteAuthorByIdDtoInput): Promise<AuthorDtoOutput>;
 }

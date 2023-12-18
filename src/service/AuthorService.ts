@@ -1,14 +1,22 @@
 import { AuthorRepositoryInterface } from "../repository/AuthorRepositoryInterface";
 import { apiStatusCode } from "../util/apiStatusCode";
 import { Output } from "../util/Output";
+import { 
+    CreateAuthorDtoInput, 
+    GetAuthorByIdDtoInput, 
+    GetAuthorByNameDtoInput,
+    UpdateAuthorByIdDtoInput, 
+    DeleteAuthorByIdDtoInput 
+} from "../dto/authorDTO";
 
 export class AuthorService {
     constructor(
         private readonly authorRepository: AuthorRepositoryInterface
     ) {}
 
-    async createAuthor(name: string): Promise<Output> {
-        let findAuthor = await this.authorRepository.getAuthorByName(name);
+    async createAuthor(createAuthorDtoInput: CreateAuthorDtoInput): Promise<Output> {
+        const getAuthorByNameDtoInput = new GetAuthorByNameDtoInput(createAuthorDtoInput.name)
+        const findAuthor = await this.authorRepository.getAuthorByName(getAuthorByNameDtoInput);
 
         if (findAuthor) {
             console.warn("AuthorService::createAuthor::Author exists");
@@ -16,13 +24,13 @@ export class AuthorService {
         }
 
         console.log("AuthorService::createAuthor::Forwarding to save");
-        const savedAuthor = await this.authorRepository.saveAuthor({name});
+        const savedAuthor = await this.authorRepository.saveAuthor(createAuthorDtoInput);
         return new Output(apiStatusCode.SUCCESS, savedAuthor);   
     }
 
-    async getAuthorById(authorId: string): Promise<Output> {
+    async getAuthorById(getAuthorByIdDtoInput: GetAuthorByIdDtoInput): Promise<Output> {
         console.log("AuthorService::getAuthorById::Forwarding the search to the author by id");
-        const findAuthor = await this.authorRepository.getAuthorById(authorId);
+        const findAuthor = await this.authorRepository.getAuthorById(getAuthorByIdDtoInput);
 
         if (!findAuthor) {
             console.warn("AuthorService::getAuthorById::Author does not exists");
@@ -39,25 +47,26 @@ export class AuthorService {
         return new Output(apiStatusCode.SUCCESS, findAuthor);
     }    
 
-    async updateAuthorById(authorId: string, nameAuthor: string): Promise<Output> {
-        let output = await this.getAuthorById(authorId);
+    async updateAuthorById(updateAuthorByIdDtoInput: UpdateAuthorByIdDtoInput): Promise<Output> {
+        const getAuthorByIdDtoInput = new GetAuthorByIdDtoInput(updateAuthorByIdDtoInput.id);
+        const output = await this.getAuthorById(getAuthorByIdDtoInput);
 
         if (output.apiStatusCode === apiStatusCode.AUTHOR_DOES_NOT_EXIST) {
             return output;
         }
         console.log("AuthorService::updateAuthorById::Forwarding for update");
-        const updatedAuthor = await this.authorRepository.updateAuthorById(authorId, nameAuthor);
+        const updatedAuthor = await this.authorRepository.updateAuthorById(updateAuthorByIdDtoInput);
         return new Output(apiStatusCode.SUCCESS, updatedAuthor);
     }
 
-    async deleteAuthorById(authorId: string): Promise<Output> {
-        let output = await this.getAuthorById(authorId);
+    async deleteAuthorById(deleteAuthorByIdDtoInput: DeleteAuthorByIdDtoInput): Promise<Output> {
+        let output = await this.getAuthorById({ id: deleteAuthorByIdDtoInput.id });
 
         if (output.apiStatusCode === apiStatusCode.AUTHOR_DOES_NOT_EXIST) {
             return output;
         }
         console.log("AuthorService::deleteAuthorById::Forwarding for delete");
-        const deleteAuthor = await this.authorRepository.deleteAuthorById(authorId);
+        const deleteAuthor = await this.authorRepository.deleteAuthorById(deleteAuthorByIdDtoInput);
         return new Output(apiStatusCode.SUCCESS, deleteAuthor);
     }
 }
