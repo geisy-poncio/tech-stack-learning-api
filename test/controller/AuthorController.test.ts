@@ -1,13 +1,14 @@
 import { describe, expect, jest, test } from "@jest/globals";
 import { AuthorService } from "../../src/service/AuthorService";
-import { AuthorRepository } from "../../src/repository/AuthorRepository";
+import { AuthorRepositoryInterface } from "../../src/repository/AuthorRepositoryInterface"; 
 import { AuthorController } from "../../src/controller/AuthorController";
 import { apiStatusCode } from "../../src/util/apiStatusCode";
 import { Output } from "../../src/util/Output";
 import { authorEntities } from "../mocks/databaseEntities";
+import { mock } from "jest-mock-extended";
 
 describe("AuthorController", () => {
-    const authorRepository = new AuthorRepository();
+    const authorRepository = mock<AuthorRepositoryInterface>();
     const authorService = new AuthorService(authorRepository);
     const authorController = new AuthorController(authorService);
 
