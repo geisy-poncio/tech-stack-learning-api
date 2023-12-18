@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient } from "@prisma/client";
 
 export const prisma = new PrismaClient();
 
@@ -63,13 +63,36 @@ export class AuthorRepository{
 
     async deleteAuthorById(authorId: string) {
         console.log("AuthorRepository::deleteAuthorById::Excluding author");
-        const deleteAuthor = await prisma.author.update({
-            where: { id: authorId },
-            data: {
-                isDeleted: true,
-                deletedAt: new Date()
+        const extendedPrisma = prisma.$extends({
+            name: "softDelete",
+            query: {
+                author: {
+                    async delete({model, operation, args, query}){
+                        return await prisma.author.update({
+                            where: {id: args.where.id},
+                            data: {
+                                isDeleted: true,
+                                books: {
+                                    updateMany: {
+                                        where: {authorId: args.where.id},
+                                        data: {isDeleted: true}
+                                    }
+                                }
+                            },
+                        })
+                    }
+                },
+                book: {
+                    async delete({model, operation, args, query}){
+                        return await prisma.book.update({
+                            where: args.where,
+                            data: {isDeleted: true}
+                        })
+                    }
+                }
             }
-        });
-        return deleteAuthor;
+        })
+
+        await extendedPrisma.author.delete({ where: {id: authorId}})
     }
 }
