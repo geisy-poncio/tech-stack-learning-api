@@ -43,6 +43,28 @@ export function getAuthorByIdValidator(request: any, response: any, next: any) {
     next();
 }
 
+export function getAllAuthorsValidator(request: any, response: any, next: any) {
+    console.log("index::getAllAuthorsValidator::verifying if the query input is valid");
+
+    const schema = Joi.object({
+        page: Joi.number().integer().min(0).required(),
+        size: Joi.number().integer().positive().required()
+    });
+
+    const result = schema.validate(request.query);
+    if(result.error) {
+        console.warn("index::getAllAuthorsValidator::the input is invalid");
+        return response.status(400).json({
+            message: result.error.message,
+            apiStatusCode: apiStatusCode.INVALID_INPUT
+        })
+    }
+
+    console.log("index::getAuthorByIdValidator::the input is valid");
+    request.query = result.value;
+    next();
+}
+
 export function updateAuthorByIdValidator(request: any, response: any, next: any) {
     console.log("index::updateAuthorByIdValidator::verifying if the input is valid");
 

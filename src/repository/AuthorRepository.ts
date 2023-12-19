@@ -5,7 +5,8 @@ import {
     GetAuthorByNameDtoInput,
     GetAuthorByIdDtoInput,
     UpdateAuthorByIdDtoInput,
-    DeleteAuthorByIdDtoInput 
+    DeleteAuthorByIdDtoInput, 
+    GetAllAuthorsDtoInput
 } from "../dto/authorDTO";
 
 export const prisma = new PrismaClient();
@@ -37,16 +38,21 @@ export class AuthorRepository implements AuthorRepositoryInterface {
         return authorByName;
     }
 
-    async getAllAuthors() {
+    async getAllAuthors(getAllAuthorsDtoInput: GetAllAuthorsDtoInput) {
         console.log("AuthorRepository::getAllAuthors::Looking for authors");
+        const { page, size } = getAllAuthorsDtoInput;
+        
         const allAuthors = await prisma.author.findMany({ 
+            skip: page * size,
+            take: size,
             where: { 
                 isDeleted: false 
             } 
         });
+
         return allAuthors;
      }
-
+ 
     async getAuthorById(getAuthorByIdDtoInput: GetAuthorByIdDtoInput) {
         console.log("AuthorRepository::getAuthorById::Looking for author");
         const authorById = await prisma.author.findFirst({ 

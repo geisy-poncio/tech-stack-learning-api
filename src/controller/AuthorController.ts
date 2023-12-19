@@ -3,7 +3,8 @@ import {
     CreateAuthorDtoInput, 
     GetAuthorByIdDtoInput, 
     UpdateAuthorByIdDtoInput, 
-    DeleteAuthorByIdDtoInput 
+    DeleteAuthorByIdDtoInput, 
+    GetAllAuthorsDtoInput
 } from "../dto/authorDTO";
 
 export class AuthorController{
@@ -21,9 +22,9 @@ export class AuthorController{
         return await this.authorService.getAuthorById(getAuthorByIdDtoInput);
     }
 
-    async getAllAuthors(){
+    async getAllAuthors(getAllAuthorsDtoInput: GetAllAuthorsDtoInput){
         console.log("AuthorController::getAllAuthors::Request received");
-        return await this.authorService.getAllAuthors();
+        return await this.authorService.getAllAuthors(getAllAuthorsDtoInput);
     }
 
     async updateAuthorById(updateAuthorByIdDtoInput: UpdateAuthorByIdDtoInput) {

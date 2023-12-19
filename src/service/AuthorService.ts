@@ -6,7 +6,8 @@ import {
     GetAuthorByIdDtoInput, 
     GetAuthorByNameDtoInput,
     UpdateAuthorByIdDtoInput, 
-    DeleteAuthorByIdDtoInput 
+    DeleteAuthorByIdDtoInput, 
+    GetAllAuthorsDtoInput
 } from "../dto/authorDTO";
 
 export class AuthorService {
@@ -40,9 +41,9 @@ export class AuthorService {
         return new Output(apiStatusCode.SUCCESS, findAuthor);
     }    
 
-    async getAllAuthors(): Promise<Output> {
+    async getAllAuthors(getAllAuthorsDtoInput: GetAllAuthorsDtoInput): Promise<Output> {
         console.log("AuthorService::getAllAuthors::Forwarding the research to all authors");
-        const findAuthor = await this.authorRepository.getAllAuthors();
+        const findAuthor = await this.authorRepository.getAllAuthors(getAllAuthorsDtoInput);
 
         return new Output(apiStatusCode.SUCCESS, findAuthor);
     }    

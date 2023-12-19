@@ -7,14 +7,16 @@ import {
     createAuthorValidator, 
     getAuthorByIdValidator, 
     updateAuthorByIdValidator, 
-    deleteAuthorByIdValidator 
+    deleteAuthorByIdValidator, 
+    getAllAuthorsValidator
 } from "../middleware/authorMiddleware";
 
 import { 
     CreateAuthorDtoInput, 
     GetAuthorByIdDtoInput, 
     UpdateAuthorByIdDtoInput, 
-    DeleteAuthorByIdDtoInput 
+    DeleteAuthorByIdDtoInput, 
+    GetAllAuthorsDtoInput
 } from "../dto/authorDTO";
 
 const authorRepository = new AuthorRepository();
@@ -71,9 +73,12 @@ export function authorRoute() {
            
     })
     
-    router.get("/authors", async (request, response, next) => {
+    router.get("/authors", getAllAuthorsValidator, async (request, response, next) => {
         try {
-            const output = await authorController.getAllAuthors();
+            const { page, size } = request.query as { page: any, size: any };
+
+            const getAllAuthorsDtoInput = new GetAllAuthorsDtoInput(page, size);
+            const output = await authorController.getAllAuthors(getAllAuthorsDtoInput);
     
             response.status(200).json({ 
                 message: "Authors found",

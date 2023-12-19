@@ -27,6 +27,13 @@ export class GetAuthorByIdDtoInput {
     ){}
 }
 
+export class GetAllAuthorsDtoInput {
+    constructor(
+        public readonly page: number,
+        public readonly size: number
+    ){}
+}
+
 export class UpdateAuthorByIdDtoInput {
     constructor(
         public readonly id: string,
