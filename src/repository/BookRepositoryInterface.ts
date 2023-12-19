@@ -1,9 +1,15 @@
-import { BookDtoOutput } from "../dto/bookDTO";
+import { 
+    BookDtoOutput,
+    CreateBookDtoInput,
+    GetBookByIdDtoInput,
+    UpdateBookByIdDtoInput,
+    DeleteBookByIdDtoInput
+ } from "../dto/bookDTO";
 
 export interface BookRepositoryInterface{
-    saveBook(input: {name: string, authorId: string}): Promise<BookDtoOutput>;
-    getBookById(bookId: string): Promise<BookDtoOutput | null>;
+    saveBook(createBookDtoInput: CreateBookDtoInput): Promise<BookDtoOutput>;
+    getBookById(getBookByIdDtoInput: GetBookByIdDtoInput): Promise<BookDtoOutput | null>;
     getAllBooks(): Promise<BookDtoOutput[] | null>;
-    updateBookById(bookId: string, name?: string, authorId?: string): Promise <BookDtoOutput>;
-    deleteBookById(bookId: string): Promise <BookDtoOutput>;
+    updateBookById(updateBookByIdDtoInput: UpdateBookByIdDtoInput): Promise <BookDtoOutput>;
+    deleteBookById(deleteBookByIdDtoInput: DeleteBookByIdDtoInput): Promise <BookDtoOutput>;
 }

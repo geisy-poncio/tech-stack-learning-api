@@ -1,27 +1,33 @@
 import { PrismaClient } from '@prisma/client'
 import { BookRepositoryInterface } from './BookRepositoryInterface';
+import { 
+    CreateBookDtoInput,
+    GetBookByIdDtoInput,
+    UpdateBookByIdDtoInput,
+    DeleteBookByIdDtoInput
+} from '../dto/bookDTO';
 
 export const prisma = new PrismaClient();
 
 export class BookRepository implements BookRepositoryInterface{
-    async saveBook(input: {name: string, authorId: string}) {
+    async saveBook(createBookDtoInput: CreateBookDtoInput) {
         console.log("BookRepository::saveBook::Saving book");
         const newBook = await prisma.book.create({
             data: {
-                name: input.name,
+                name: createBookDtoInput.name,
                 author: {
-                    connect: { id: input.authorId }
+                    connect: { id: createBookDtoInput.authorId }
                 }
             }
         });
         return newBook;
     }
 
-    async getBookById(bookId: string) {
+    async getBookById(getBookByIdDtoInput: GetBookByIdDtoInput) {
         console.log("BookRepository::getBookById::Looking for book");
         const findBook = await prisma.book.findFirst({
             where: {
-                id: bookId,
+                id: getBookByIdDtoInput.id,
                 isDeleted: false
             },
             include: {
@@ -41,25 +47,25 @@ export class BookRepository implements BookRepositoryInterface{
         return allBooks;
     }
 
-    async updateBookById(bookId: string, name?: string, authorId?: string) {
+    async updateBookById(updateBookByIdDtoInput: UpdateBookByIdDtoInput) {
         console.log("BookRepository::updateBookById::Updating book");
         const updateBook = await prisma.book.update({
             where: {
-                id: bookId
+                id: updateBookByIdDtoInput.id
             },
             data: {
-                name: name,
-                authorId: authorId
+                name: updateBookByIdDtoInput.name,
+                authorId: updateBookByIdDtoInput.authorId
             }
         });
         return updateBook;
     }
 
-    async deleteBookById(bookId: string) {
+    async deleteBookById(deleteBookByIdDtoInput: DeleteBookByIdDtoInput) {
         console.log("BookRepository::deleteBookById::Deleting book");
         const deleteBook = await prisma.book.update({
             where: {
-                id: bookId
+                id: deleteBookByIdDtoInput.id
             },
             data: {
                 isDeleted: true,

@@ -5,7 +5,20 @@ import { BookRepository } from "../repository/BookRepository";
 import { BookService } from "../service/BookService"; 
 import { BookController } from "../controller/BookController"; 
 import { apiStatusCode } from "../util/apiStatusCode"; 
-import { createBookValidator, getBookByIdValidator, updateBookByIdValidator, deleteBookByIdValidator } from "../middleware/bookMiddleware"; 
+import { 
+    createBookValidator, 
+    getBookByIdValidator, 
+    updateBookByIdValidator, 
+    deleteBookByIdValidator 
+} from "../middleware/bookMiddleware"; 
+
+import { 
+    CreateBookDtoInput,
+    GetBookByIdDtoInput,
+    UpdateBookByIdDtoInput,
+    DeleteBookByIdDtoInput
+} from '../dto/bookDTO';
+import { deepEqual } from "assert";
 
 const authorRepository = new AuthorRepository();
 const authorService = new AuthorService(authorRepository);
@@ -17,11 +30,10 @@ const bookController = new BookController(bookService);
 const router = express.Router();
 
 export function bookRoute() {
-    router.post("/books", createBookValidator, async (request, response, next) => {
-        const { name, authorId } = request.body;
- 
+    router.post("/books", createBookValidator, async (request, response, next) => { 
         try {
-            const output = await bookController.createBook(name, authorId);
+            const createBookDtoInput = new CreateBookDtoInput(request.body.name, request.body.authorId);
+            const output = await bookController.createBook(createBookDtoInput);
     
             if (output.apiStatusCode === apiStatusCode.AUTHOR_DOES_NOT_EXIST){
                 return response.status(404).json({
@@ -42,10 +54,9 @@ export function bookRoute() {
     })
 
     router.get("/books/:id", getBookByIdValidator, async (request, response, next) => {
-        const bookId = request.params.id;
-    
         try {
-            const output = await bookController.getBookById(bookId);
+            const getBookByIdDtoInput = new GetBookByIdDtoInput(request.params.id);
+            const output = await bookController.getBookById(getBookByIdDtoInput);
     
             if (output.apiStatusCode === apiStatusCode.BOOK_DOES_NOT_EXIST) {
                 return response.status(404).json({
@@ -80,12 +91,10 @@ export function bookRoute() {
         }
     })
     
-    router.put("/books/:id", updateBookByIdValidator, async (request, response, next) => {
-        const bookId = request.params.id
-        const {name, authorId} = request.body;
-    
+    router.put("/books/:id", updateBookByIdValidator, async (request, response, next) => {    
         try{
-            const output = await bookController.updateBookById(bookId, name, authorId);
+            const updateBookByIdDtoInput = new UpdateBookByIdDtoInput(request.params.id, request.body.name, request.body.authorId);
+            const output = await bookController.updateBookById(updateBookByIdDtoInput);
     
             if (output.apiStatusCode === apiStatusCode.BOOK_DOES_NOT_EXIST) {
                 return response.status(404).json({
@@ -111,11 +120,10 @@ export function bookRoute() {
         }
     })
     
-    router.delete("/books/:id", deleteBookByIdValidator, async (request, response, next) => {
-        const bookId = request.params.id;
-        
+    router.delete("/books/:id", deleteBookByIdValidator, async (request, response, next) => {        
         try{
-            const output = await bookController.deleteBookById(bookId);
+            const deleteBookByIdDtoInput = new DeleteBookByIdDtoInput(request.params.id);
+            const output = await bookController.deleteBookById(deleteBookByIdDtoInput);
     
             if (output.apiStatusCode === apiStatusCode.BOOK_DOES_NOT_EXIST) {
                 return response.status(404).json({

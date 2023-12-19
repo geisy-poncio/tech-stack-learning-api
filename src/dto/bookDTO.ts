@@ -9,3 +9,30 @@ export class BookDtoOutput {
         public readonly authorId: string
     ){}
 }
+
+export class CreateBookDtoInput {
+    constructor(
+        public readonly name: string,
+        public readonly authorId: string
+    ){}
+}
+
+export class GetBookByIdDtoInput {
+    constructor(
+        public readonly id: string
+    ){}
+}
+
+export class UpdateBookByIdDtoInput {
+    constructor(
+        public readonly id: string,
+        public readonly name?: string,
+        public readonly authorId?: string
+    ){}
+}
+
+export class DeleteBookByIdDtoInput {
+    constructor(
+        public readonly id: string
+    ){}
+}
