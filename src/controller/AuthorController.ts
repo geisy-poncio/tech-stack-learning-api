@@ -1,4 +1,4 @@
-import { AuthorService } from "../service/AuthorService";
+import { AuthorServiceInterface } from "../service/AuthorServiceInterface";
 import { 
     CreateAuthorDtoInput, 
     GetAuthorByIdDtoInput, 
@@ -9,7 +9,7 @@ import {
 
 export class AuthorController{
     constructor(
-        private readonly authorService: AuthorService
+        private readonly authorService: AuthorServiceInterface
     ) {}
 
     async createAuthor(createAuthorDtoInput: CreateAuthorDtoInput) {

@@ -1,4 +1,5 @@
 import { AuthorRepositoryInterface } from "../repository/AuthorRepositoryInterface";
+import { AuthorServiceInterface } from "./AuthorServiceInterface";
 import { apiStatusCode } from "../util/apiStatusCode";
 import { Output } from "../util/Output";
 import { 
@@ -10,7 +11,7 @@ import {
     GetAllAuthorsDtoInput
 } from "../dto/authorDTO";
 
-export class AuthorService {
+export class AuthorService implements AuthorServiceInterface {
     constructor(
         private readonly authorRepository: AuthorRepositoryInterface
     ) {}

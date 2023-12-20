@@ -1,6 +1,4 @@
 import { describe, expect, jest, test } from "@jest/globals";
-import { AuthorService } from "../../src/service/AuthorService";
-import { AuthorRepositoryInterface } from "../../src/repository/AuthorRepositoryInterface"; 
 import { AuthorController } from "../../src/controller/AuthorController";
 import { apiStatusCode } from "../../src/util/apiStatusCode";
 import { Output } from "../../src/util/Output";
@@ -13,10 +11,10 @@ import {
     DeleteAuthorByIdDtoInput, 
     GetAllAuthorsDtoInput
 } from "../../src/dto/authorDTO";
+import { AuthorServiceInterface } from "../../src/service/AuthorServiceInterface";
 
 describe("AuthorController", () => {
-    const authorRepository = mock<AuthorRepositoryInterface>();
-    const authorService = new AuthorService(authorRepository);
+    const authorService = mock<AuthorServiceInterface>();
     const authorController = new AuthorController(authorService);
 
     describe("createAuthor", () => {
