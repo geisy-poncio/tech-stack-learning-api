@@ -97,7 +97,14 @@ Retornar um autor.
 - localhost:3000/authors/:id
 
 #### Request Params
-Como parâmetro o id do autor, por exemplo: ```f2c11592-88d4-4a14-ad48-f2d973ccd66f```
+Como parâmetro o id do autor, por exemplo: ```f2c11592-88d4-4a14-ad48-f2d973ccd66f```.
+
+#### Request Query
+Como Query Params, temos a página e a quantidade exibida em cada página. Exemplo:
+
+        Page: 0
+        Size: 10
+Se não for fornecido um valor, por padrão será page = 0 e size = 2, sendo que a primeira página é a página 0 (zero).
 
 #### Response
 Retorna o autor. Exemplo para status 200:
@@ -112,6 +119,12 @@ Retorna o autor. Exemplo para status 200:
         "createdAt": "2023-12-05T16:19:46.780Z",
         "updatedAt": "2023-12-05T16:19:46.780Z",
         "deletedAt": null
+        "books": [
+            {
+                "id": "1ac11a39-8254-4d0c-8d97-0f3b550b5052",
+                "name": "Jane Doe Book"
+            }
+        ]
     }
 }
 ```
@@ -123,6 +136,13 @@ Outros status possíveis são:
 
 Retornar todos os autores.
 - localhost:3000/authors
+
+#### Request Query
+Como Query Params, temos a página e a quantidade exibida em cada página. Exemplo:
+
+        Page: 0
+        Size: 10
+A primeira página é a página 0 (zero).
 
 #### Response
 Retorna a lista de autores cadastrados. Exemplo para status 200:
@@ -305,6 +325,13 @@ Outros possíveis status:
 
 Retornar todos os livros.
 - localhost:3000/books
+
+#### Request Query
+Como Query Params, temos a página e a quantidade exibida em cada página. Exemplo:
+
+        Page: 0
+        Size: 10
+A primeira página é a página 0 (zero).
 
 #### Response
 Retorna a lista de livros cadastrados. Exemplo para status 200:
