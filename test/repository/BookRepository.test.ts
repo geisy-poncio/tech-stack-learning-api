@@ -5,7 +5,8 @@ import {
     CreateBookDtoInput,
     GetBookByIdDtoInput,
     UpdateBookByIdDtoInput,
-    DeleteBookByIdDtoInput
+    DeleteBookByIdDtoInput,
+    GetAllBooksDtoInput
 } from "../../src/dto/bookDTO";
 
 describe("BookRepository", () => {
@@ -38,10 +39,11 @@ describe("BookRepository", () => {
             { id: "1", name: "John Doe Book", isDeleted: false, createdAt: new Date(), updatedAt: new Date(), deletedAt: null, authorId: "1"},
             { id: "2", name: "Jane Doe Book", isDeleted: false, createdAt: new Date(), updatedAt: new Date(), deletedAt: null, authorId: "2"}
         ];
+        const getAllBooksDtoInput = new GetAllBooksDtoInput(0, 5);
 
         test("Should list all non-deleted books", async () => {
             jest.spyOn(prisma.book, "findMany").mockResolvedValue(allBooks);
-            const output = await bookRepository.getAllBooks();
+            const output = await bookRepository.getAllBooks(getAllBooksDtoInput);
 
             expect(output).toEqual(allBooks);
             expect(output.every(book => book.isDeleted === false)).toBeTruthy();

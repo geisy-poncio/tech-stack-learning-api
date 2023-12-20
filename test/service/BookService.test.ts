@@ -12,7 +12,8 @@ import {
     CreateBookDtoInput,
     GetBookByIdDtoInput,
     UpdateBookByIdDtoInput,
-    DeleteBookByIdDtoInput
+    DeleteBookByIdDtoInput,
+    GetAllBooksDtoInput
 } from "../../src/dto/bookDTO";
 
 describe("BookService", () => {
@@ -65,9 +66,11 @@ describe("BookService", () => {
             { id: "1", name: "John Doe Book", isDeleted: false, createdAt: new Date(), updatedAt: new Date(), deletedAt: null, authorId: "1"},
             { id: "2", name: "Jane Doe Book", isDeleted: false, createdAt: new Date(), updatedAt: new Date(), deletedAt: null, authorId: "2"}
         ];
+        const getAllBooksDtoInput = new GetAllBooksDtoInput(0, 5);
+
         test("Should return SUCCESS and all the books", async () => {
             jest.spyOn(bookRepository, "getAllBooks").mockResolvedValue(allBooks);
-            const output = await bookService.getAllBooks();
+            const output = await bookService.getAllBooks(getAllBooksDtoInput);
 
             expect(output.apiStatusCode).toEqual(apiStatusCode.SUCCESS);
             expect(output.data).toEqual(allBooks);

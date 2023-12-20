@@ -10,7 +10,8 @@ import {
     CreateAuthorDtoInput, 
     GetAuthorByIdDtoInput, 
     UpdateAuthorByIdDtoInput, 
-    DeleteAuthorByIdDtoInput 
+    DeleteAuthorByIdDtoInput, 
+    GetAllAuthorsDtoInput
 } from "../../src/dto/authorDTO";
 
 describe("AuthorController", () => {
@@ -43,9 +44,11 @@ describe("AuthorController", () => {
     })
 
     describe("getAllAuthors", () => {
+        const getAllAuthorsDtoInput = new GetAllAuthorsDtoInput(0, 5);
+
         test("Should return SUCCESS when finding authors", async () => {
             jest.spyOn(authorService, "getAllAuthors").mockResolvedValue(new Output(apiStatusCode.SUCCESS, authorEntities));
-            const output = await authorController.getAllAuthors();
+            const output = await authorController.getAllAuthors(getAllAuthorsDtoInput);
 
             expect(output.apiStatusCode).toEqual(apiStatusCode.SUCCESS);
             expect(output.data).toEqual(authorEntities);

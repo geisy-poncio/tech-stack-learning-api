@@ -9,7 +9,8 @@ import {
     CreateAuthorDtoInput, 
     GetAuthorByIdDtoInput, 
     UpdateAuthorByIdDtoInput, 
-    DeleteAuthorByIdDtoInput 
+    DeleteAuthorByIdDtoInput, 
+    GetAllAuthorsDtoInput
 } from "../../src/dto/authorDTO";
 
 describe("AuthorService", () => {
@@ -61,10 +62,11 @@ describe("AuthorService", () => {
             { id: "1", name: "John Doe", isDeleted: false, createdAt: new Date(), updatedAt: new Date(), deletedAt: null },
             { id: "2", name: "Jane Doe", isDeleted: false, createdAt: new Date(), updatedAt: new Date(), deletedAt: null }
         ];  
+        const getAllAuthorsDtoInput = new GetAllAuthorsDtoInput(0, 5);
 
         test("Should return all authors", async () => {
             jest.spyOn(authorRepository, "getAllAuthors").mockResolvedValue(allAuthors);
-            const output = await authorService.getAllAuthors();
+            const output = await authorService.getAllAuthors(getAllAuthorsDtoInput);
             
             expect(output.apiStatusCode).toEqual(apiStatusCode.SUCCESS);
             expect(output.data).toEqual(allAuthors);
