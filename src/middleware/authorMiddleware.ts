@@ -25,21 +25,36 @@ export function createAuthorValidator(request: any, response: any, next: any) {
 export function getAuthorByIdValidator(request: any, response: any, next: any) {
     console.log("index::getAuthorByIdValidator::verifying if the input is valid");
 
-    const schema = Joi.object({
+    const schemaParams = Joi.object({
         id: Joi.string().trim().uuid().required()
     });
 
-    const result = schema.validate(request.params);
-    if (result.error) {
+    const resultParams = schemaParams.validate(request.params);
+    if (resultParams.error) {
         console.warn("index::getAuthorByIdValidator::the input invalid")
         return response.status(400).json({
-            message: result.error.message,
+            message: resultParams.error.message,
+            apiStatusCode: apiStatusCode.INVALID_INPUT
+        })
+    }
+
+    const schemaQuery = Joi.object({
+        page: Joi.number().integer().min(0),
+        size: Joi.number().integer().positive()
+    });
+
+    const resultQuery = schemaQuery.validate(request.query);
+    if (resultQuery.error) {
+        console.warn("index::getAuthorByIdValidator::the input invalid")
+        return response.status(400).json({
+            message: resultQuery.error.message,
             apiStatusCode: apiStatusCode.INVALID_INPUT
         })
     }
     
     console.log("index::getAuthorByIdValidator::the input is valid");
-    request.params = result.value;
+    request.params = resultParams.value;
+    request.query = resultQuery.value;
     next();
 }
 

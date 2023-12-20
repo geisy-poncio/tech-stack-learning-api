@@ -23,7 +23,9 @@ export class GetAuthorByNameDtoInput {
 
 export class GetAuthorByIdDtoInput {
     constructor(
-        public readonly id: string
+        public readonly id: string,
+        public readonly page?: number,
+        public readonly size?: number
     ){}
 }
 

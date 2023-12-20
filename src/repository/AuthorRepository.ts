@@ -55,6 +55,8 @@ export class AuthorRepository implements AuthorRepositoryInterface {
  
     async getAuthorById(getAuthorByIdDtoInput: GetAuthorByIdDtoInput) {
         console.log("AuthorRepository::getAuthorById::Looking for author");
+        const { page, size } = getAuthorByIdDtoInput;
+        
         const authorById = await prisma.author.findFirst({ 
             where: { 
                 id: getAuthorByIdDtoInput.id, 
@@ -62,6 +64,12 @@ export class AuthorRepository implements AuthorRepositoryInterface {
             },
             include: {
                 books: {
+                    select: {
+                        id: true,
+                        name: true
+                    },
+                    skip: (page ?? 0) * (size ?? 10),
+                    take: size ?? 10,
                     where: {
                       isDeleted: false,
                     }

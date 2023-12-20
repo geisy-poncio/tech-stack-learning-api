@@ -51,7 +51,9 @@ export function authorRoute() {
     
     router.get("/authors/:id", getAuthorByIdValidator, async (request, response, next) => {
         try {
-            const getAuthorByIdDtoInput = new GetAuthorByIdDtoInput(request.params.id)
+            const { page, size } = request.query as { page: any, size: any };
+
+            const getAuthorByIdDtoInput = new GetAuthorByIdDtoInput(request.params.id, page, size);
             const output = await authorController.getAuthorById(getAuthorByIdDtoInput);
     
             if (output.apiStatusCode === apiStatusCode.AUTHOR_DOES_NOT_EXIST) {
