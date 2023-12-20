@@ -1,5 +1,6 @@
 import Joi from "joi";
 import { apiStatusCode } from "../util/apiStatusCode";
+import { json } from "stream/consumers";
 
 export function createBookValidator(request: any, response: any, next: any) {
     console.log("index::createBookValidator::verifying if the input is valid");
@@ -11,15 +12,37 @@ export function createBookValidator(request: any, response: any, next: any) {
 
     const result = schema.validate(request.body);
     if (result.error) {
-        console.warn("index::createBookValidator::the input invalid")
+        console.warn("index::createBookValidator::the input invalid");
         return response.status(400).json({
             message: result.error.message,
             apiStatusCode: apiStatusCode.INVALID_INPUT
-        })
+        });
     }
 
     console.log("index::createBookValidator::the input is valid");
     request.body = result.value;
+    next();
+}
+
+export function getAllBooksValidator(request: any, response: any, next: any) {
+    console.log("index::getAllBooksValidator::verifying if the input is valid");
+
+    const schema = Joi.object({
+        page: Joi.number().integer().min(0).required(),
+        size: Joi.number().integer().positive().required()
+    });
+
+    const result = schema.validate(request.query);
+    if (result.error) {
+        console.warn("index::getAllBooksValidator::the input is invalid");
+        return response.status(400).json({
+            message: result.error.message,
+            apiStatusCode: apiStatusCode.INVALID_INPUT
+        });
+    }
+
+    console.log("index::getAllBooksValidator::the input is valid");
+    request.query = result.value;
     next();
 }
 
@@ -32,11 +55,11 @@ export function getBookByIdValidator(request: any, response: any, next: any) {
 
     const result = schema.validate(request.params);
     if (result.error) {
-        console.warn("index::getBookByIdValidator::the input invalid")
+        console.warn("index::getBookByIdValidator::the input invalid");
         return response.status(400).json({
             message: result.error.message,
             apiStatusCode: apiStatusCode.INVALID_INPUT
-        })
+        });
     }
 
     console.log("index::getBookByIdValidator::the input is valid");
@@ -53,11 +76,11 @@ export function updateBookByIdValidator(request: any, response: any, next: any) 
 
     const paramsResult = paramsSchema.validate(request.params);
     if (paramsResult.error) {
-        console.warn("index::updateBookByIdValidator::input invalid")
+        console.warn("index::updateBookByIdValidator::input invalid");
         return response.status(400).json({
             message: paramsResult.error.message,
             apiStatusCode: apiStatusCode.INVALID_INPUT
-        })
+        });
     }
 
     const bodySchema = Joi.object({
@@ -67,11 +90,11 @@ export function updateBookByIdValidator(request: any, response: any, next: any) 
 
     const bodyResult = bodySchema.validate(request.body);
     if (bodyResult.error) {
-        console.warn("index::updateBookByIdValidator::input invalid")
+        console.warn("index::updateBookByIdValidator::input invalid");
         return response.status(400).json({
             message: bodyResult.error.message,
             apiStatusCode: apiStatusCode.INVALID_INPUT
-        })
+        });
     }
 
     console.log("index::updateBookByIdValidator::the input is valid");
@@ -89,11 +112,11 @@ export function deleteBookByIdValidator(request: any, response: any, next: any) 
 
     const result = schema.validate(request.params);
     if (result.error) {
-        console.warn("index::deleteBookByIdValidator::the input invalid")
+        console.warn("index::deleteBookByIdValidator::the input invalid");
         return response.status(400).json({
             message: result.error.message,
             apiStatusCode: apiStatusCode.INVALID_INPUT
-        })
+        });
     }
 
     console.log("index::deleteBookByIdValidator::the input is valid");

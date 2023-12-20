@@ -4,7 +4,8 @@ import {
     CreateBookDtoInput,
     GetBookByIdDtoInput,
     UpdateBookByIdDtoInput,
-    DeleteBookByIdDtoInput
+    DeleteBookByIdDtoInput,
+    GetAllBooksDtoInput
 } from '../dto/bookDTO';
 
 export const prisma = new PrismaClient();
@@ -37,9 +38,13 @@ export class BookRepository implements BookRepositoryInterface{
         return findBook;
     }
 
-    async getAllBooks() {
+    async getAllBooks(getAllBooksDtoInput: GetAllBooksDtoInput) {
         console.log("BookRepository::getAllBook::Looking for books");
+        const { page, size } = getAllBooksDtoInput;
+
         const allBooks = await prisma.book.findMany({ 
+            skip: page * size,
+            take: size,
             where: { 
                 isDeleted: false 
             } 

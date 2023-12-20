@@ -6,7 +6,8 @@ import {
     CreateBookDtoInput,
     GetBookByIdDtoInput,
     UpdateBookByIdDtoInput,
-    DeleteBookByIdDtoInput
+    DeleteBookByIdDtoInput,
+    GetAllBooksDtoInput
 } from '../dto/bookDTO';
 import { GetAuthorByIdDtoInput } from "../dto/authorDTO";
 
@@ -43,9 +44,9 @@ export class BookService {
         return new Output(apiStatusCode.SUCCESS, output);
     } 
 
-    async getAllBooks(): Promise<Output> {
+    async getAllBooks(getAllBooksDtoInput: GetAllBooksDtoInput): Promise<Output> {
         console.log("BookService::getAllBooks::Forwarding the search books");
-        const output = await this.bookRepository.getAllBooks();
+        const output = await this.bookRepository.getAllBooks(getAllBooksDtoInput);
         return new Output(apiStatusCode.SUCCESS, output);
     }
 

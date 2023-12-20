@@ -9,16 +9,17 @@ import {
     createBookValidator, 
     getBookByIdValidator, 
     updateBookByIdValidator, 
-    deleteBookByIdValidator 
+    deleteBookByIdValidator, 
+    getAllBooksValidator
 } from "../middleware/bookMiddleware"; 
 
 import { 
     CreateBookDtoInput,
     GetBookByIdDtoInput,
     UpdateBookByIdDtoInput,
-    DeleteBookByIdDtoInput
+    DeleteBookByIdDtoInput,
+    GetAllBooksDtoInput
 } from '../dto/bookDTO';
-import { deepEqual } from "assert";
 
 const authorRepository = new AuthorRepository();
 const authorService = new AuthorService(authorRepository);
@@ -47,7 +48,7 @@ export function bookRoute() {
                 apiStatusCode: output.apiStatusCode,
                 data: output.data
             });
-    
+
         } catch (err) {
             next(err);
         }
@@ -74,11 +75,14 @@ export function bookRoute() {
         } catch (err) {
             next(err);
         }
-    })
+    }) 
     
-    router.get("/books", async (request, response, next) => {
+    router.get("/books", getAllBooksValidator, async (request, response, next) => {
         try {
-            const output = await bookController.getAllBooks();
+            const { page, size } = request.query as { page: any, size: any };
+
+            const getAllBooksDtoInput = new GetAllBooksDtoInput(page, size);
+            const output = await bookController.getAllBooks(getAllBooksDtoInput);
     
             response.status(200).json({
                 message: "Books found",

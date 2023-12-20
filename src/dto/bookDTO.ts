@@ -17,6 +17,13 @@ export class CreateBookDtoInput {
     ){}
 }
 
+export class GetAllBooksDtoInput {
+    constructor(
+        public readonly page: number,
+        public readonly size: number
+    ){}
+}
+
 export class GetBookByIdDtoInput {
     constructor(
         public readonly id: string

@@ -3,7 +3,8 @@ import {
     CreateBookDtoInput,
     GetBookByIdDtoInput,
     UpdateBookByIdDtoInput,
-    DeleteBookByIdDtoInput
+    DeleteBookByIdDtoInput,
+    GetAllBooksDtoInput
 } from '../dto/bookDTO';
 
 export class BookController{
@@ -21,9 +22,9 @@ export class BookController{
         return await this.bookService.getBookById(getBookByIdDtoInput);
     }
 
-    async getAllBooks() {
+    async getAllBooks(getAllBooksDtoInput: GetAllBooksDtoInput) {
         console.log("BookController::getAllBooks::Request received");
-        return await this.bookService.getAllBooks();
+        return await this.bookService.getAllBooks(getAllBooksDtoInput);
     }
 
     async updateBookById(updateBookByIdDtoInput: UpdateBookByIdDtoInput) {
