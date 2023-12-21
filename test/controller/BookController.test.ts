@@ -1,12 +1,9 @@
 import { describe, expect, jest, test } from "@jest/globals";
-import { BookRepositoryInterface } from "../../src/repository/BookRepositoryInterface"; 
-import { BookService } from "../../src/service/BookService";
 import { BookController } from "../../src/controller/BookController";
+import { BookServiceInterface } from "../../src/service/BookServiceInterface";
 import { apiStatusCode } from "../../src/util/apiStatusCode";
 import { bookEntities } from "../mocks/databaseEntities";
 import { Output } from "../../src/util/Output";
-import { AuthorRepositoryInterface } from "../../src/repository/AuthorRepositoryInterface"; 
-import { AuthorService } from "../../src/service/AuthorService"; 
 import { mock } from "jest-mock-extended";
 import { 
     CreateBookDtoInput,
@@ -17,11 +14,7 @@ import {
 } from "../../src/dto/bookDTO";
 
 describe ("BookController", () => {
-    const authorRepository = mock<AuthorRepositoryInterface>();
-    const authorService = new AuthorService(authorRepository);
-    
-    const bookRepository = mock<BookRepositoryInterface>();
-    const bookService = new BookService(bookRepository, authorService);
+    const bookService = mock<BookServiceInterface>();
     const bookController = new BookController(bookService);
 
     describe("createBook", () => {

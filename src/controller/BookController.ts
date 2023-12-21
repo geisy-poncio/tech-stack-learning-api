@@ -1,4 +1,4 @@
-import { BookService } from "../service/BookService"; 
+import { BookServiceInterface } from "../service/BookServiceInterface";
 import { 
     CreateBookDtoInput,
     GetBookByIdDtoInput,
@@ -9,7 +9,7 @@ import {
 
 export class BookController{
     constructor(
-        private readonly bookService: BookService
+        private readonly bookService: BookServiceInterface
     ){}
 
     async createBook(createBookDtoInput: CreateBookDtoInput) {

@@ -1,7 +1,6 @@
 import { BookRepositoryInterface } from "../repository/BookRepositoryInterface";
 import { apiStatusCode } from "../util/apiStatusCode";
 import { Output } from "../util/Output";
-import { AuthorService } from "./AuthorService";
 import { 
     CreateBookDtoInput,
     GetBookByIdDtoInput,
@@ -10,11 +9,13 @@ import {
     GetAllBooksDtoInput
 } from '../dto/bookDTO';
 import { GetAuthorByIdDtoInput } from "../dto/authorDTO";
+import { BookServiceInterface } from "./BookServiceInterface";
+import { AuthorServiceInterface } from "./AuthorServiceInterface";
 
-export class BookService {
+export class BookService implements BookServiceInterface {
     constructor(
         private readonly bookRepository: BookRepositoryInterface,
-        private readonly authorService: AuthorService   
+        private readonly authorService: AuthorServiceInterface   
     ) {}
 
     async createBook(createBookDtoInput: CreateBookDtoInput): Promise<Output> {
