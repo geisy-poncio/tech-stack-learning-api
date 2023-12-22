@@ -20,11 +20,13 @@ import {
     DeleteBookByIdDtoInput,
     GetAllBooksDtoInput
 } from '../dto/bookDTO';
+import { AuthorRepositoryMock } from "../repository/AuthorRepositoryMock";
+import { BookRepositoryMock } from "../repository/BookRepositoryMock";
 
-const authorRepository = new AuthorRepository();
+const authorRepository = new AuthorRepositoryMock();
 const authorService = new AuthorService(authorRepository);
 
-const bookRepository = new BookRepository();
+const bookRepository = new BookRepositoryMock();
 const bookService = new BookService(bookRepository, authorService);
 const bookController = new BookController(bookService);
 

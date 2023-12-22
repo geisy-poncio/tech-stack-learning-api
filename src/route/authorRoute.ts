@@ -18,8 +18,9 @@ import {
     DeleteAuthorByIdDtoInput, 
     GetAllAuthorsDtoInput
 } from "../dto/authorDTO";
+import { AuthorRepositoryMock } from "../repository/AuthorRepositoryMock";
 
-const authorRepository = new AuthorRepository();
+const authorRepository = new AuthorRepositoryMock();
 const authorService = new AuthorService(authorRepository);
 const authorController = new AuthorController(authorService);
 
