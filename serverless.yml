@@ -1,0 +1,54 @@
+service: projeto-books
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+
+package:
+  individually: true
+
+resources:
+  Resources:
+    MyUserPool:
+      Type: AWS::Cognito::UserPool
+      Properties:
+        UserPoolName: authorizer-test
+        UsernameAttributes: 
+          - 'email'
+        AutoVerifiedAttributes:
+          - 'email'
+        UsernameConfiguration:
+          CaseSensitive: false
+
+    MyUserPoolClient:
+      Type: AWS::Cognito::UserPoolClient
+      Properties:
+        ClientName: authorizer-books
+        UserPoolId: !Ref MyUserPool
+        GenerateSecret: true
+        AllowedOAuthFlowsUserPoolClient: false
+        ExplicitAuthFlows:
+          - "USER_PASSWORD_AUTH"
+
+functions:
+  lambda-proxy:
+    name: projeto-lambda-proxy
+    handler: dist/src/index.handler
+    package:
+      exclude:
+        - "./**"
+      include:
+        - "node_modules/**"
+        - "dist/**"
+    events:
+      - http:
+          path: /{proxy+}
+          method: ANY
+          authorizer:
+            name: cognito-authorizer
+            type: COGNITO_USER_POOLS
+            arn:
+              Fn::GetAtt:
+                - MyUserPool
+                - Arn

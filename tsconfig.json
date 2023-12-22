@@ -1,0 +1,21 @@
+{
+    "compilerOptions": {
+      "target": "es2020",
+      "module": "commonjs",
+      "moduleResolution": "node",
+      "sourceMap": false,
+      "preserveConstEnums": true,
+      "esModuleInterop": true,
+      "forceConsistentCasingInFileNames": true,
+      "strict": true,
+      "skipLibCheck": true,
+      "outDir": "./dist"
+    },
+    "exclude": [
+      "./src/server.ts",
+      "./src/repository/AuthorRepository.ts",
+      "./src/repository/BookRepository.ts",
+      "./test/",
+      "jest.config.ts"
+    ]
+}
