@@ -2,6 +2,7 @@ import express from "express";
 import { bookRoute } from "./route/bookRoute"; 
 import { errorHandler } from "./middleware/errorHandler";
 import { authorRoute } from "./route/authorRoute"; 
+import { authRoute } from "./route/authRoute";
 
 export const app = express();
 
@@ -19,4 +20,5 @@ app.use((request, response, next) => {
 
 app.use(authorRoute());
 app.use(bookRoute());
+app.use(authRoute());
 app.use(errorHandler);

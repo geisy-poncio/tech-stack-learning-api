@@ -1,6 +1,5 @@
 import Joi from "joi";
 import { apiStatusCode } from "../util/apiStatusCode";
-import { json } from "stream/consumers";
 
 export function createBookValidator(request: any, response: any, next: any) {
     console.log("index::createBookValidator::verifying if the input is valid");

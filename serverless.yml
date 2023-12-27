@@ -5,6 +5,19 @@ provider:
   name: aws
   runtime: nodejs18.x
 
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - "cognito-idp:AdminInitiateAuth"
+            - "cognito-idp:AdminConfirmSignUp"
+          Resource: !GetAtt MyUserPool.Arn
+        - Effect: Allow
+          Action:
+            - "cognito-idp:SignUp"
+          Resource: "*"
+
 package:
   individually: true
 
@@ -29,7 +42,8 @@ resources:
         GenerateSecret: true
         AllowedOAuthFlowsUserPoolClient: false
         ExplicitAuthFlows:
-          - "USER_PASSWORD_AUTH"
+          - "ALLOW_ADMIN_USER_PASSWORD_AUTH"
+          - "ALLOW_REFRESH_TOKEN_AUTH"
 
 functions:
   lambda-proxy:

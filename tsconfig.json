@@ -13,9 +13,6 @@
     },
     "exclude": [
       "./src/server.ts",
-      "./src/repository/AuthorRepository.ts",
-      "./src/repository/BookRepository.ts",
-      "./test/",
-      "jest.config.ts"
+      "./test/"
     ]
 }
