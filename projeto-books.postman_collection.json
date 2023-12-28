@@ -1,0 +1,428 @@
+{
+	"info": {
+		"_postman_id": "00dd25f2-adcc-4bd9-92f4-bcf4ed5b8135",
+		"name": "projeto-books",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "31644315"
+	},
+	"item": [
+		{
+			"name": "author",
+			"item": [
+				{
+					"name": "create authors",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{auth}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"authorName\":\"John Doe\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/authors",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"authors"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "find all authors",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{auth}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/authors?page=0&size=5",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"authors"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "find author by id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{auth}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/authors/ef550be3-6b32-4606-b05d-0d6244532d2f",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"authors",
+								"ef550be3-6b32-4606-b05d-0d6244532d2f"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0",
+									"disabled": true
+								},
+								{
+									"key": "size",
+									"value": "10",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update author by id",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{auth}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"authorName\":\"John J. Doe\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/authors/865beb56-d70a-4801-aae1-25593d3f82fb",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"authors",
+								"865beb56-d70a-4801-aae1-25593d3f82fb"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete author by id",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{auth}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/authors/865beb56-d70a-4801-aae1-25593d3f82fb",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"authors",
+								"865beb56-d70a-4801-aae1-25593d3f82fb"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "book",
+			"item": [
+				{
+					"name": "create books",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{auth}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Reflections of John Doe\",\r\n    \"authorId\":\"ef550be3-6b32-4606-b05d-0d6244532d2f\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/books",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"books"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "find all books",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{auth}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/books?page=0&size=5",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"books"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "find book by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/books/a9022111-3579-46a6-b207-27a6be822afd",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"books",
+								"a9022111-3579-46a6-b207-27a6be822afd"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update book by id",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{auth}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"The John Doe Story\",\r\n    \"authorId\": \"6d2ce013-a21c-48dd-9e06-c45bc24be903\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/books/a9022111-3579-46a6-b207-27a6be822afd",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"books",
+								"a9022111-3579-46a6-b207-27a6be822afd"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete book by id",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{auth}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/books/a9022111-3579-46a6-b207-27a6be822afd",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"books",
+								"a9022111-3579-46a6-b207-27a6be822afd"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "signUp",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{auth}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\":\"root@email.com\",\r\n    \"password\":\"Root@123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/signUp",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"signUp"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{auth}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\":\"root@email.com\",\r\n    \"password\":\"Root@123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/login",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "host",
+			"value": "https://b1wjaq9sqb.execute-api.us-east-1.amazonaws.com/dev",
+			"type": "string",
+			"disabled": true
+		},
+		{
+			"key": "host",
+			"value": "localhost:3000",
+			"type": "string"
+		},
+		{
+			"key": "auth",
+			"value": "eyJraWQiOiJxV0Uzc25vZk54eW1ad0w3YzVEbDdcL3ZKM3BoeUxQWnUrVGVKWlFnRzR3Yz0iLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiI1MTVlYWYxNi03OWZhLTQyZTgtODNlYS05MWI5MWU5MTk2YTgiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImlzcyI6Imh0dHBzOlwvXC9jb2duaXRvLWlkcC51cy1lYXN0LTEuYW1hem9uYXdzLmNvbVwvdXMtZWFzdC0xXzNWOWpZWU52eSIsImNvZ25pdG86dXNlcm5hbWUiOiI1MTVlYWYxNi03OWZhLTQyZTgtODNlYS05MWI5MWU5MTk2YTgiLCJvcmlnaW5fanRpIjoiZDJmOGExYjMtMTBhNi00ZGNlLTk1ZWEtYmU1ZjE4ZjIyOTY3IiwiYXVkIjoiNnFlMHRycml2YnBnOWZ1djkxajduaTloaTQiLCJldmVudF9pZCI6ImEyOWNlODAwLWUxYzctNDQ1My05N2E3LTY3YjUyMTE4ZmIwYiIsInRva2VuX3VzZSI6ImlkIiwiYXV0aF90aW1lIjoxNzAzNjc5ODQ2LCJleHAiOjE3MDM2ODM0NDYsImlhdCI6MTcwMzY3OTg0NiwianRpIjoiZWUwY2QxZGUtMTZlMC00NDE5LThkYzUtNTA5ODg1M2ZhZjZiIiwiZW1haWwiOiJnZWlzeUBlbWFpbC5jb20ifQ.eeNI3yFP7GflM9uv1vvT0g3bR3NZfKeeuqysQkjEwfc_4H9uZNH35_Amf6YRckXjxEVSeJDU9yNkRM4zJesOgyXPcDSfCOFxct3jHeOeWnfcivEi6bCmxTzjh39zPEt8W1e49pXdY5cBy9slie3LIq--n2MGfrWnnhfdFVNXLeCtHWEvdAtKlNU9TMEc1rtUKBRMcJJ1duqLlxCzlSpL4bbFOU7LFz4yuxKPnvgC-sLSdYk1kZUQOpRQaU3xlj925l93r_X04X_fyJSOV2ADM2piDoDdsraDYfMAtQCfci7t0McTkdsP-irdvb37h1lfqaugA47Stt9ad852MnNdTg",
+			"type": "string",
+			"disabled": true
+		}
+	]
+}
