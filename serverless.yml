@@ -1,4 +1,4 @@
-service: projeto-books
+service: tech-stack-learning-api
 frameworkVersion: '3'
 
 provider:
@@ -12,6 +12,7 @@ provider:
           Action:
             - "cognito-idp:AdminInitiateAuth"
             - "cognito-idp:AdminConfirmSignUp"
+            - "cognito-idp:DescribeUserPoolClient"
           Resource: !GetAtt MyUserPool.Arn
         - Effect: Allow
           Action:
@@ -45,9 +46,12 @@ resources:
           - "ALLOW_ADMIN_USER_PASSWORD_AUTH"
           - "ALLOW_REFRESH_TOKEN_AUTH"
 
+custom:
+    cognitoClientSecret: ""
+
 functions:
   lambda-proxy:
-    name: projeto-lambda-proxy
+    name: tech-stack-lambda-proxy
     handler: dist/src/index.handler
     package:
       exclude:
@@ -56,6 +60,12 @@ functions:
         - "node_modules/**"
         - "dist/**"
     events:
+      - http:
+          path: /signUp
+          method: POST
+      - http:
+          path: /login
+          method: POST
       - http:
           path: /{proxy+}
           method: ANY
@@ -66,3 +76,7 @@ functions:
               Fn::GetAtt:
                 - MyUserPool
                 - Arn
+    environment:
+      COGNITO_CLIENT_ID: !Ref MyUserPoolClient
+      COGNITO_CLIENT_SECRET: ${self:custom.cognitoClientSecret}
+      COGNITO_USER_POOL_ID: !GetAtt MyUserPool.UserPoolId

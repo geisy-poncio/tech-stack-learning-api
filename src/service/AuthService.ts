@@ -31,7 +31,7 @@ export class AuthService{
             const confirmSignUpResult = await this.cognitoIdentityProviderClient.send(confirmSignUpCommand);
             console.log("AuthService::createUser::user confirmed successfully");
             
-            return new Output(apiStatusCode.SUCCESS, signUp);
+            return new Output(apiStatusCode.SUCCESS);
 
         } catch (error) {
             console.error("AuthService::createUser::error creating user:", error);
@@ -56,7 +56,7 @@ export class AuthService{
             const result = await this.cognitoIdentityProviderClient.send(authCommand);
             console.log("AuthService:authenticateUser::user authenticated");
 
-            return new Output(apiStatusCode.SUCCESS, result);
+            return new Output(apiStatusCode.SUCCESS, result.AuthenticationResult?.IdToken);
 
         } catch (error) {
             console.error("AuthService::authenticateUser::error authenticating user:", error);

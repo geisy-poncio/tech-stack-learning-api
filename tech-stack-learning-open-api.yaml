@@ -1,0 +1,600 @@
+openapi: 3.0.3
+info:
+  title: tech-stack-learning-api
+  version: 0.0.1
+paths: 
+  /signUp:
+    post:
+      summary: User registration
+      description: Create a new user to access the api
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  format: email
+                password: 
+                  type: string
+                  format: password
+              example:  
+                email: "user@example.com"
+                password: "User@123"
+      responses:
+        "200":
+          description: "user created with success"
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  apiStatusCode:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  message: "User created successfully"
+                  apiStatusCode: "SUCCESS"
+        "500":
+            $ref: "#/components/responses/internalServerErrorResponse"
+  /login:
+    post:
+      summary: User authentication
+      description: authenticates the user to access the api
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  format: email
+                password: 
+                  type: string
+                  format: password
+              example:  
+                email: "user@example.com"
+                password: "User@123"
+      responses:
+        "200":
+          description: "user authenticated with success"
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  apiStatusCode:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  message: "User authenticated successfully"
+                  apiStatusCode: "SUCCESS"
+                  data: "eyJraWQiO..."
+        "500":
+            $ref: "#/components/responses/internalServerErrorResponse"
+  /authors:
+    post:
+      summary: "Create an author"
+      parameters:
+        - $ref: "#/components/parameters/authorizationHeader"
+      requestBody:
+        required: true
+        content:
+          "application/json":
+            schema:
+              type: object
+              required:
+                - authorName
+              properties:
+                authorName:
+                  type: string
+              example:
+                authorName: "John Doe"
+      responses:
+        "201":
+          description: "Author created with success"
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  apiStatusCode:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  message: "Author created successfully"
+                  apiStatusCode: "SUCCESS"
+                  data: {
+                        "id": "1a4b4ce8-5703-4894-bf89-2e634c0f1cf0",
+                        "name": "John Doe",
+                        "isDeleted": false,
+                        "createdAt": "2024-01-08T20:26:53.651Z",
+                        "updatedAt": "2024-01-08T20:26:53.651Z",
+                        "deletedAt": null
+                      }
+        "400":
+          $ref: "#/components/responses/invalidInputResponse"
+        "401":
+          $ref: "#/components/responses/unauthorizedResponse"
+        "500":
+          $ref: "#/components/responses/internalServerErrorResponse"
+    get:
+      summary: "Return all authors"
+      parameters:
+        - $ref: "#/components/parameters/authorizationHeader"
+        - $ref: "#/components/parameters/pageQuery"
+        - $ref: "#/components/parameters/sizeQuery"
+      responses:
+        "200":
+          description: "Authors found with success"
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  apiStatusCode:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  message: "Authors found"
+                  apiStatusCode: "SUCCESS"
+                  data: [
+                        {
+                            "id": "b49d0b7e-89e2-42c7-9c75-b301f9126242",
+                            "name": "John Doe",
+                            "isDeleted": false,
+                            "createdAt": "2024-01-12T20:35:09.764Z",
+                            "updatedAt": "2024-01-12T20:35:09.764Z",
+                            "deletedAt": null
+                        }
+                    ]
+        "400":
+          $ref: "#/components/responses/invalidInputResponse"
+        "401":
+          $ref: "#/components/responses/unauthorizedResponse"
+        "500":
+          $ref: "#/components/responses/internalServerErrorResponse"
+  /authors/{authorId}:
+    get:
+      summary: "Return an author by id"
+      parameters:
+        - $ref: "#/components/parameters/authorizationHeader"
+        - $ref: "#/components/parameters/authorIdPath"
+      responses:
+        "200":
+          description: "Author found with success"
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  apiStatusCode:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  message: "Author found"
+                  apiStatusCode: "SUCCESS"
+                  data: {
+                        "id": "b49d0b7e-89e2-42c7-9c75-b301f9126242",
+                        "name": "John Doe",
+                        "isDeleted": false,
+                        "createdAt": "2024-01-12T20:35:09.764Z",
+                        "updatedAt": "2024-01-12T20:35:09.764Z",
+                        "deletedAt": null
+                      }
+        "400":
+          $ref: "#/components/responses/invalidInputResponse"
+        "401":
+          $ref: "#/components/responses/unauthorizedResponse"
+        "500":
+          $ref: "#/components/responses/internalServerErrorResponse"
+    put:
+      summary: "Update an author by id"
+      parameters:
+        - $ref: "#/components/parameters/authorizationHeader"
+        - $ref: "#/components/parameters/authorIdPath"
+      requestBody:
+        required: true
+        content:
+          "application/json":
+            schema:
+              type: object
+              required:
+                - authorName
+              properties:
+                authorName:
+                  type: string
+              example:
+                authorName: "John J. Doe"
+      responses:
+        "200":
+          description: "Author updated with success"
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  apiStatusCode:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  message: "Author updated successfully"
+                  apiStatusCode: "SUCCESS"
+                  data: {
+                        "id": "b49d0b7e-89e2-42c7-9c75-b301f9126242",
+                        "name": "John J. Doe",
+                        "isDeleted": false,
+                        "createdAt": "2024-01-12T20:35:09.764Z",
+                        "updatedAt": "2024-01-12T20:50:09.764Z",
+                        "deletedAt": null
+                      }
+        "400":
+          $ref: "#/components/responses/invalidInputResponse"
+        "401":
+          $ref: "#/components/responses/unauthorizedResponse"
+        "500":
+          $ref: "#/components/responses/internalServerErrorResponse"
+    delete:
+      summary: "Delete an author by id"
+      parameters:
+        - $ref: "#/components/parameters/authorizationHeader"
+        - $ref: "#/components/parameters/authorIdPath"
+      responses:
+        "200":
+          description: "Author deleted with success"
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  apiStatusCode:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  message: "Author successfully deleted"
+                  apiStatusCode: "SUCCESS"
+                  data: {
+                        "id": "b49d0b7e-89e2-42c7-9c75-b301f9126242",
+                        "name": "John J. Doe",
+                        "isDeleted": true,
+                        "createdAt": "2024-01-12T20:35:09.764Z",
+                        "updatedAt": "2024-01-12T20:50:09.764Z",
+                        "deletedAt": "2024-01-15T12:33:21.087Z"
+                      }
+        "400":
+          $ref: "#/components/responses/invalidInputResponse"
+        "401":
+          $ref: "#/components/responses/unauthorizedResponse"
+        "500":
+          $ref: "#/components/responses/internalServerErrorResponse"
+  /books:
+    post:
+      summary: "Create a book"
+      parameters:
+        - $ref: "#/components/parameters/authorizationHeader"
+      requestBody:
+        required: true
+        content:
+          "application/json":
+            schema:
+              type: object
+              required:
+                - name
+                - authorId
+              properties:
+                name:
+                  type: string
+                authorId:
+                  type: string
+              example:
+                name: "Reflections of Jane Doe"
+                authorId: "2c86c956-0135-4cc4-90d2-d805a1b74db7"
+      responses:
+        "201":
+          description: "Book created with success"
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  apiStatusCode:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  message: "Book created successfully"
+                  apiStatusCode: "SUCCESS"
+                  data: {
+                        "id": "ea96da71-5881-4593-9a44-a1107e42f1db",
+                        "name": "Reflections of Jane Doe",
+                        "isDeleted": false,
+                        "createdAt": "2024-01-15T12:38:33.608Z",
+                        "updatedAt": "2024-01-15T12:38:33.608Z",
+                        "deletedAt": null,
+                        "authorId": "2c86c956-0135-4cc4-90d2-d805a1b74db7"
+                      }
+        "400":
+          $ref: "#/components/responses/invalidInputResponse"
+        "401":
+          $ref: "#/components/responses/unauthorizedResponse"
+        "500":
+          $ref: "#/components/responses/internalServerErrorResponse"
+    get:
+      summary: "Return all books"
+      parameters:
+        - $ref: "#/components/parameters/authorizationHeader"
+        - $ref: "#/components/parameters/pageQuery"
+        - $ref: "#/components/parameters/sizeQuery"
+      responses:
+        "200":
+          description: "Books found with success"
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  apiStatusCode:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  message: "Books found"
+                  apiStatusCode: "SUCCESS"
+                  data: [
+                        {
+                          "id": "ea96da71-5881-4593-9a44-a1107e42f1db",
+                          "name": "Reflections of Jane Doe",
+                          "isDeleted": false,
+                          "createdAt": "2024-01-15T12:38:33.608Z",
+                          "updatedAt": "2024-01-15T12:38:33.608Z",
+                          "deletedAt": null,
+                          "authorId": "2c86c956-0135-4cc4-90d2-d805a1b74db7"
+                        }
+                      ]
+        "400":
+          $ref: "#/components/responses/invalidInputResponse"
+        "401":
+          $ref: "#/components/responses/unauthorizedResponse"
+        "500":
+          $ref: "#/components/responses/internalServerErrorResponse"
+  /books/{bookId}:
+    get:
+      summary: "Return a book by id"
+      parameters:
+        - $ref: "#/components/parameters/authorizationHeader"
+        - $ref: "#/components/parameters/bookIdPath"
+      responses:
+        "200":
+          description: "Book found with success"
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  apiStatusCode:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  message: "Book found"
+                  apiStatusCode: "SUCCESS"
+                  data: {
+                        "id": "ea96da71-5881-4593-9a44-a1107e42f1db",
+                        "name": "Reflections of Jane Doe",
+                        "isDeleted": false,
+                        "createdAt": "2024-01-15T12:38:33.608Z",
+                        "updatedAt": "2024-01-15T12:38:33.608Z",
+                        "deletedAt": null,
+                        "authorId": "2c86c956-0135-4cc4-90d2-d805a1b74db7"
+                      }
+        "400":
+          $ref: "#/components/responses/invalidInputResponse"
+        "401":
+          $ref: "#/components/responses/unauthorizedResponse"
+        "500":
+          $ref: "#/components/responses/internalServerErrorResponse"
+    put:
+      summary: "Update a book by id"
+      parameters:
+        - $ref: "#/components/parameters/authorizationHeader"
+        - $ref: "#/components/parameters/bookIdPath"
+      requestBody:
+        required: true
+        content:
+          "application/json":
+            schema:
+              type: object
+              required:
+                - name
+                - authorId
+              properties:
+                name:
+                  type: string
+                authorId:
+                  type: string
+              example:
+                name: "The Jane Doe Story"
+                authorId: "cc64cd66-849c-4db7-b140-22fb11761371"
+      responses:
+        "200":
+          description: "Book updated with success"
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  apiStatusCode:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  message: "Book updated successfully"
+                  apiStatusCode: "SUCCESS"
+                  data: {
+                        "id": "ea96da71-5881-4593-9a44-a1107e42f1db",
+                        "name": "The Jane Doe Story",
+                        "isDeleted": false,
+                        "createdAt": "2024-01-15T12:38:33.608Z",
+                        "updatedAt": "2024-01-15T12:50:09.210Z",
+                        "deletedAt": null,
+                        "authorId": "cc64cd66-849c-4db7-b140-22fb11761371"
+                      }
+        "400":
+          $ref: "#/components/responses/invalidInputResponse"
+        "401":
+          $ref: "#/components/responses/unauthorizedResponse"
+        "500":
+          $ref: "#/components/responses/internalServerErrorResponse"
+    delete:
+      summary: "Delete a book by id"
+      parameters:
+        - $ref: "#/components/parameters/authorizationHeader"
+        - $ref: "#/components/parameters/bookIdPath"
+      responses:
+        "200":
+          description: "Book deleted with success"
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  apiStatusCode:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  message: "Book successfully deleted"
+                  apiStatusCode: "SUCCESS"
+                  data: {
+                        "id": "ea96da71-5881-4593-9a44-a1107e42f1db",
+                        "name": "The Jane Doe Story",
+                        "isDeleted": true,
+                        "createdAt": "2024-01-15T12:38:33.608Z",
+                        "updatedAt": "2024-01-15T12:50:09.210Z",
+                        "deletedAt": "2024-01-15T12:53:03.187Z",
+                        "authorId": "cc64cd66-849c-4db7-b140-22fb11761371"
+                      }
+        "400":
+          $ref: "#/components/responses/invalidInputResponse"
+        "401":
+          $ref: "#/components/responses/unauthorizedResponse"
+        "500":
+          $ref: "#/components/responses/internalServerErrorResponse"
+
+components:
+  parameters:
+    authorizationHeader:
+      name: Authorization
+      in: header
+      required: true
+      schema:
+        type: string
+        example:
+          "eyJrawQiO..."
+    pageQuery:
+      name: page
+      in: query
+      schema:
+        type: number
+        example: 0
+    sizeQuery:
+      name: size
+      in: query
+      schema:
+        type: number
+        example: 10
+    authorIdPath:
+      name: authorId
+      in: path
+      required: true
+      schema:
+        type: string
+        example: "b49d0b7e-89e2-42c7-9c75-b301f9126242"
+    bookIdPath:
+      name: bookId
+      in: path
+      required: true
+      schema:
+        type: string
+        example: "ea96da71-5881-4593-9a44-a1107e42f1db"
+  responses:
+    unauthorizedResponse:
+      description: "The token is invalid"
+      content:
+        "application/json":
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+            example:
+              message: "The incoming token has expired"
+    invalidInputResponse:
+      description: "Data input is invalid"
+      content:
+        "application/json":
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+              apiStatusCode:
+                type: string
+            example:
+              message: "\"authorName\" must be a string"
+              apiStatusCode: "INVALID_INPUT"
+    internalServerErrorResponse:
+      description: "Internal error"
+      content:
+        "application/json":
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+              apiStatusCode:
+                type: string
+            example:
+              message: "Internal error"
+              apiStatusCode: "INTERNAL_ERROR"

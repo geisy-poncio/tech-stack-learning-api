@@ -4,4 +4,4 @@ npm install
 
 npm run build
 
-serverless deploy --stage dev
+serverless deploy --stage dev mfa

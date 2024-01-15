@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "00dd25f2-adcc-4bd9-92f4-bcf4ed5b8135",
-		"name": "projeto-books",
+		"name": "tech-stack-learning-api",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "31644315"
 	},
@@ -16,7 +16,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{auth}}",
+								"value": "{{token}}",
 								"type": "text"
 							}
 						],
@@ -55,7 +55,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{auth}}",
+								"value": "{{token}}",
 								"type": "text"
 							}
 						],
@@ -88,7 +88,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{auth}}",
+								"value": "{{token}}",
 								"type": "text"
 							}
 						],
@@ -124,7 +124,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{auth}}",
+								"value": "{{token}}",
 								"type": "text"
 							}
 						],
@@ -157,7 +157,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{auth}}",
+								"value": "{{token}}",
 								"type": "text"
 							}
 						],
@@ -186,7 +186,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{auth}}",
+								"value": "{{token}}",
 								"type": "text"
 							}
 						],
@@ -218,7 +218,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{auth}}",
+								"value": "{{token}}",
 								"type": "text"
 							}
 						],
@@ -248,7 +248,13 @@
 					"name": "find book by id",
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
 						"url": {
 							"raw": "{{host}}/books/a9022111-3579-46a6-b207-27a6be822afd",
 							"host": [
@@ -269,7 +275,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{auth}}",
+								"value": "{{token}}",
 								"type": "text"
 							}
 						],
@@ -302,7 +308,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "{{auth}}",
+								"value": "{{token}}",
 								"type": "text"
 							}
 						],
@@ -325,13 +331,7 @@
 			"name": "signUp",
 			"request": {
 				"method": "POST",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "{{auth}}",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"body": {
 					"mode": "raw",
 					"raw": "{\r\n    \"email\":\"root@email.com\",\r\n    \"password\":\"Root@123\"\r\n}",
@@ -355,15 +355,22 @@
 		},
 		{
 			"name": "login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var res = pm.response.json();\r",
+							"pm.collectionVariables.set('token', res.data);\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "{{auth}}",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"body": {
 					"mode": "raw",
 					"raw": "{\r\n    \"email\":\"root@email.com\",\r\n    \"password\":\"Root@123\"\r\n}",
@@ -409,20 +416,19 @@
 	"variable": [
 		{
 			"key": "host",
-			"value": "https://b1wjaq9sqb.execute-api.us-east-1.amazonaws.com/dev",
-			"type": "string",
-			"disabled": true
-		},
-		{
-			"key": "host",
-			"value": "localhost:3000",
+			"value": "",
 			"type": "string"
 		},
 		{
-			"key": "auth",
-			"value": "eyJraWQiOiJxV0Uzc25vZk54eW1ad0w3YzVEbDdcL3ZKM3BoeUxQWnUrVGVKWlFnRzR3Yz0iLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiI1MTVlYWYxNi03OWZhLTQyZTgtODNlYS05MWI5MWU5MTk2YTgiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImlzcyI6Imh0dHBzOlwvXC9jb2duaXRvLWlkcC51cy1lYXN0LTEuYW1hem9uYXdzLmNvbVwvdXMtZWFzdC0xXzNWOWpZWU52eSIsImNvZ25pdG86dXNlcm5hbWUiOiI1MTVlYWYxNi03OWZhLTQyZTgtODNlYS05MWI5MWU5MTk2YTgiLCJvcmlnaW5fanRpIjoiZDJmOGExYjMtMTBhNi00ZGNlLTk1ZWEtYmU1ZjE4ZjIyOTY3IiwiYXVkIjoiNnFlMHRycml2YnBnOWZ1djkxajduaTloaTQiLCJldmVudF9pZCI6ImEyOWNlODAwLWUxYzctNDQ1My05N2E3LTY3YjUyMTE4ZmIwYiIsInRva2VuX3VzZSI6ImlkIiwiYXV0aF90aW1lIjoxNzAzNjc5ODQ2LCJleHAiOjE3MDM2ODM0NDYsImlhdCI6MTcwMzY3OTg0NiwianRpIjoiZWUwY2QxZGUtMTZlMC00NDE5LThkYzUtNTA5ODg1M2ZhZjZiIiwiZW1haWwiOiJnZWlzeUBlbWFpbC5jb20ifQ.eeNI3yFP7GflM9uv1vvT0g3bR3NZfKeeuqysQkjEwfc_4H9uZNH35_Amf6YRckXjxEVSeJDU9yNkRM4zJesOgyXPcDSfCOFxct3jHeOeWnfcivEi6bCmxTzjh39zPEt8W1e49pXdY5cBy9slie3LIq--n2MGfrWnnhfdFVNXLeCtHWEvdAtKlNU9TMEc1rtUKBRMcJJ1duqLlxCzlSpL4bbFOU7LFz4yuxKPnvgC-sLSdYk1kZUQOpRQaU3xlj925l93r_X04X_fyJSOV2ADM2piDoDdsraDYfMAtQCfci7t0McTkdsP-irdvb37h1lfqaugA47Stt9ad852MnNdTg",
+			"key": "host",
+			"value": "",
 			"type": "string",
 			"disabled": true
+		},
+		{
+			"key": "token",
+			"value": "",
+			"type": "string"
 		}
 	]
 }

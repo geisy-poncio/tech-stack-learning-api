@@ -79,7 +79,8 @@ export class BookRepositoryMock implements BookRepositoryInterface {
             const updatedBook: BookDtoOutput = {
                 ...mockDbBook[bookIndex],
                 name: name !== undefined ? name : mockDbBook[bookIndex].name,
-                authorId: authorId !== undefined ? authorId : mockDbBook[bookIndex].authorId
+                authorId: authorId !== undefined ? authorId : mockDbBook[bookIndex].authorId,
+                updatedAt: new Date()
             };
 
             mockDbBook[bookIndex] = updatedBook;

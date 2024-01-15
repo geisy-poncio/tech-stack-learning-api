@@ -41,7 +41,7 @@ export class AuthorRepositoryMock implements AuthorRepositoryInterface {
             console.log("AuthorRepositoryMock::getAuthorByName::Looking for author");
             const author = await mockDbAuthor.find((obj) => obj.name == getAuthorByNameDtoInput.name);
             
-            if (author) {
+            if (author && !author.isDeleted) {
                 return author;
             } else {
                 return null;
@@ -99,6 +99,7 @@ export class AuthorRepositoryMock implements AuthorRepositoryInterface {
             const updatedAuthor: AuthorDtoOutput = {
                 ...mockDbAuthor[authorIndex],
                 name: name,
+                updatedAt: new Date()
             };
 
             mockDbAuthor[authorIndex] = updatedAuthor;

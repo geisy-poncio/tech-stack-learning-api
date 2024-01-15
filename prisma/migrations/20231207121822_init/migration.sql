@@ -2,7 +2,7 @@
 CREATE TABLE "Author" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255) NOT NULL,
-    "idDeleted" BOOLEAN NOT NULL DEFAULT false,
+    "isDeleted" BOOLEAN NOT NULL DEFAULT false,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "deletedAt" TIMESTAMP(3),
@@ -14,7 +14,7 @@ CREATE TABLE "Author" (
 CREATE TABLE "Book" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(255) NOT NULL,
-    "idDeleted" BOOLEAN NOT NULL DEFAULT false,
+    "isDeleted" BOOLEAN NOT NULL DEFAULT false,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "deletedAt" TIMESTAMP(3),

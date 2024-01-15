@@ -1,9 +1,5 @@
 # Registro de livros e autores
-Esse projeto consiste em uma API REST de registro de livros e autores. As principais tecnologias utilizadas são: TypeScript, Node.js, Express, Prisma e Docker Compose.
-
-### Requisitos: 
-- Possuir o [Docker](https://www.docker.com/products/docker-desktop/) instalado em seu sistema.
-
+Esse projeto consiste em uma API REST de registro de livros e autores. As principais tecnologias utilizadas são: TypeScript, Node.js, Express, Prisma, Docker Compose e AWS (Lambda, API Gateway e Cognito).
 
 ## Índice 
 
@@ -12,7 +8,15 @@ Esse projeto consiste em uma API REST de registro de livros e autores. As princi
 * [Entidade Livros](#books-livros)
 * [Referências](#referências)
 
-## Instruções iniciais
+## Instruções iniciais:
+
+Para rodar essa API existem duas opções: [localmente](#localmente) e pela [AWS](#aws). Para ambas, existe no projeto um arquivo entitulado de `tech-stack-learning-api.postman_collection.json`. Nele é possível testar as rotas da API, através do [Postman](https://www.postman.com/). A seguir estão os passos necessários.
+
+### Localmente
+---
+#### *Requisitos*: 
+- *Possuir o [Docker](https://www.docker.com/products/docker-desktop/) instalado em seu sistema.*
+---
 
 1. Crie um arquivo .env com a URL do banco de dados, exemplo: ```DATABASE_URL="postgresql://postgres:password@localhost:5432/mydb?schema=public"```
 
@@ -34,14 +38,32 @@ Crie um banco de dados, por exemplo: ```CREATE DATABASE livraria;```
 npx prisma migrate dev --name init
 ```
 
-4. Para rodar a API configuramos o comando:
+4. Em `authorRoute` e `bookRoute`, altere o repository usado para `AuthorRepository` e `BookRepository`.
+
+5. Para rodar a API configuramos o comando:
 ```
 npm start
 ```
 
-5. Os testes foram feitos com Jest. Para rodar um teste temos o comando:
+6. Os testes foram feitos com Jest. Para rodar um teste temos o comando:
 ```
 npm test
+```
+
+### AWS
+---
+#### *Requisitos*:
+*Possuir uma conta AWS e ter o Serveless Framework instalado:*
+```
+npm install -g serverless
+```
+---
+
+1. Em `authorRoute` e `bookRoute`, altere o repository usado para `AuthorRepositoryMock` e `BookRepositoryMock`, pois não estamos usando um banco de dados nesse casos.
+
+2. Através do comando a seguir faça o deploy (certifique-se antes de estar com as credenciais da AWS CLI configuradas):
+```
+bash deploy.bash
 ```
 
 ## :bust_in_silhouette: Autores
@@ -61,7 +83,7 @@ A entidade autores possui os seguintes endpoints:
 ### POST Author
 
 Cadastrar novo autor.
-- localhost:3000/authors
+- /authors
 
 #### Request Body
 ```
@@ -94,13 +116,13 @@ Outros status possíveis são:
 ### GET Author by id
 
 Retornar um autor.
-- localhost:3000/authors/:id
+- /authors/:id
 
 #### Request Params
 Como parâmetro o id do autor, por exemplo: ```f2c11592-88d4-4a14-ad48-f2d973ccd66f```.
 
 #### Request Query
-Como Query Params, temos a página e a quantidade exibida em cada página. Exemplo:
+Como Query Params, temos a página e a quantidade de livros exibida em cada página. Exemplo:
 
         Page: 0
         Size: 10
@@ -135,10 +157,10 @@ Outros status possíveis são:
 ### GET All Authors
 
 Retornar todos os autores.
-- localhost:3000/authors
+- /authors
 
 #### Request Query
-Como Query Params, temos a página e a quantidade exibida em cada página. Exemplo:
+Como Query Params, temos a página e a quantidade de autores exibida em cada página. Exemplo:
 
         Page: 0
         Size: 10
@@ -174,7 +196,7 @@ Retorna a lista de autores cadastrados. Exemplo para status 200:
 ### PUT Author
 
 Atualizar o autor.
-- localhost:3000/authors/:id
+- /authors/:id
 
 #### Request Params
 Como parâmetro o id do autor, por exemplo: ```f2c11592-88d4-4a14-ad48-f2d973ccd66f```
@@ -210,7 +232,7 @@ Outro possíveis status:.
 ### DELETE Author
 
 Excluir um autor.
-- localhost:3000/authors/:id
+- /authors/:id
 
 #### Request Params
 Como parâmetro o id do autor, por exemplo: ```f2c11592-88d4-4a14-ad48-f2d973ccd66f```
@@ -252,7 +274,7 @@ A entidade livros possui os seguintes endpoints:
 ### POST Books
 
 Cadastrar novo livro.
-- localhost:3000/books
+- /books
 
 #### Request Body
 ```
@@ -287,7 +309,7 @@ Outros possíveis status:
 ### GET Book by id
 
 Retornar um livro.
-- localhost:3000/books/:id
+- /books/:id
 
 #### Request Params
 Como parâmetro o id do livro, por exemplo: ```cda81757-226d-43c1-af3d-d757395c3bad```
@@ -324,10 +346,10 @@ Outros possíveis status:
 ### GET All Books
 
 Retornar todos os livros.
-- localhost:3000/books
+- /books
 
 #### Request Query
-Como Query Params, temos a página e a quantidade exibida em cada página. Exemplo:
+Como Query Params, temos a página e a quantidade de livros exibida em cada página. Exemplo:
 
         Page: 0
         Size: 10
@@ -365,7 +387,7 @@ Retorna a lista de livros cadastrados. Exemplo para status 200:
 ### PUT Book
 
 Atualizar um livro.
-- localhost:3000/books/:id
+- /books/:id
 
 #### Request Params
 Como parâmetro o id do livro, por exemplo: ```cda81757-226d-43c1-af3d-d757395c3bad```
@@ -409,7 +431,7 @@ Outros possíveis status:
 
 ### DELETE Book
 Excluir um livro.
-- localhost:3000/books/:id
+- /books/:id
 
 #### Request Params
 Como parâmetro o id do livro, por exemplo: ```cda81757-226d-43c1-af3d-d757395c3bad```
@@ -442,3 +464,4 @@ Algumas documentações que foram usadas e podem auxiliar:
 - [Docker Compose Docs](https://docs.docker.com/compose/)
 - [Postgres no Docker](https://hub.docker.com/_/postgres)
 - [Prisma Docs](https://www.prisma.io/docs/getting-started/setup-prisma/start-from-scratch/relational-databases-typescript-postgresql)
+- [AWS SDK for JavaScript](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/introduction/)
